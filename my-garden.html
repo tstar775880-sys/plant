@@ -103,8 +103,8 @@
       <div class="card-header">
         <div>
           <span class="badge badge-blue" style="margin-bottom: 0.4rem;">[ 養護參考手冊 ]</span>
-          <h2 class="card-title">常見植物養護指標與日照介質建議</h2>
-          <p class="card-subtitle">提供熱門園藝植物的澆水週期與照顧要領參考</p>
+          <h2 class="card-title">栽培植物養護指標與日照介質建議</h2>
+          <p class="card-subtitle">依據您目前栽培的植物動態呈現。新增植物後您可以隨時問 AI，AI 會為您產生專屬養護要領。</p>
         </div>
       </div>
       <div class="card-body">
@@ -114,7 +114,7 @@
               <tr>
                 <th>植物品種</th>
                 <th>日照需求</th>
-                <th>建議給水週期</th>
+                <th>給水週期</th>
                 <th>土壤介質建議</th>
                 <th>養護關鍵技巧</th>
               </tr>
@@ -272,7 +272,6 @@
 
       refreshPageData();
 
-      // Async fetch from Supabase Cloud DB
       if (window.supabaseClient) {
         await window.GardenManager.fetchPlantsAsync();
         await window.JournalManager.fetchLogsAsync();
@@ -418,7 +417,34 @@
     function renderEncyclopedia() {
       const tbody = document.getElementById("encyclopedia-table-body");
       const list = window.GardenManager.getEncyclopedia();
-      tbody.innerHTML = list.map(item => `
+      const userPlants = window.GardenManager.getPlants();
+
+      if (list.length === 0 && userPlants.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+              尚無植物養護指標資料。<br>當您在上方新增植物後，可以告訴 AI (我)，我會為您生成並寫入專屬的養護指南指標！
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Render custom encyclopedia entries + user plants dynamically
+      let combined = [...list];
+      userPlants.forEach(p => {
+        if (!combined.some(e => e.species === p.species || e.species === p.name)) {
+          combined.push({
+            species: `${p.name} (${p.species})`,
+            sunlight: "半陰散射光",
+            waterInterval: p.waterInterval,
+            soil: "良好排水介質",
+            careTips: p.notes || "依定時給水週期維護，隨時觀察葉片狀況。"
+          });
+        }
+      });
+
+      tbody.innerHTML = combined.map(item => `
         <tr>
           <td style="font-weight: 600; color: var(--accent-green-bright);">${item.species}</td>
           <td>${item.sunlight}</td>

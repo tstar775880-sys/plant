@@ -1,49 +1,15 @@
 /**
  * Plant Hub - Garden & Plant Manager Module (Supabase + LocalStorage Hybrid)
  * Manages user's plant library with real-time Supabase Cloud DB sync.
+ * Clean slate with NO hardcoded default encyclopedia entries.
  */
 
 window.GardenManager = (function() {
   const STORAGE_KEY_PLANTS = "planthub_my_plants";
+  const STORAGE_KEY_ENCYCLOPEDIA = "planthub_plant_encyclopedia";
 
-  const plantEncyclopedia = [
-    {
-      species: "龜背竹 (Monstera)",
-      sunlight: "半陰通風處、避免強烈直射光",
-      waterInterval: 5,
-      soil: "排水良好之泥炭土混珍珠石",
-      careTips: "喜高濕度，葉片大易積灰塵，可用濕布輕拭葉面；冬日需減少水份。"
-    },
-    {
-      species: "琴葉榕 (Fiddle-leaf Fig)",
-      sunlight: "明亮散射光、每天 4-6 小時光照",
-      waterInterval: 7,
-      soil: "疏鬆肥沃、排水優良土壤",
-      careTips: "對環境變化敏感，避免頻繁移動位置；表土向下2公分乾透再澆透。"
-    },
-    {
-      species: "虎尾蘭 (Snake Plant)",
-      sunlight: "耐陰，亦喜明亮光線",
-      waterInterval: 14,
-      soil: "多肉介質或極佳排水沙質土",
-      careTips: "極度耐旱，最忌積水根腐；寧乾勿濕，冬季可2-3週澆水一次。"
-    },
-    {
-      species: "蝴蝶蘭 (Orchid)",
-      sunlight: "通風柔和散射光",
-      waterInterval: 7,
-      soil: "水苔或松樹皮塊",
-      careTips: "花期維持環境通風，水苔表面乾燥才補水，切忌將水澆入花心。"
-    },
-    {
-      species: "櫻花盆栽 (Mini Cherry)",
-      sunlight: "全日照戶外陽台",
-      waterInterval: 2,
-      soil: "微酸性排水佳腐葉土",
-      careTips: "開花前後需要充足日照與適度磷鉀肥；夏季需避免缺水枯黃。"
-    }
-  ];
-
+  // Clean slate: No hardcoded default encyclopedia
+  const defaultEncyclopedia = [];
   const defaultPlants = [];
   let memoryPlantsCache = null;
 
@@ -52,7 +18,6 @@ window.GardenManager = (function() {
     if (!data) return defaultPlants;
     try {
       const parsed = JSON.parse(data);
-      // Filter out old mock IDs
       return parsed.filter(p => !p.id.includes("plant_1") && !p.id.includes("plant_2") && !p.id.includes("plant_3"));
     } catch (e) {
       return defaultPlants;
@@ -184,7 +149,19 @@ window.GardenManager = (function() {
   }
 
   function getEncyclopedia() {
-    return plantEncyclopedia;
+    const data = localStorage.getItem(STORAGE_KEY_ENCYCLOPEDIA);
+    if (!data) return defaultEncyclopedia;
+    try { return JSON.parse(data); } catch (e) { return defaultEncyclopedia; }
+  }
+
+  function saveEncyclopedia(list) {
+    localStorage.setItem(STORAGE_KEY_ENCYCLOPEDIA, JSON.stringify(list));
+  }
+
+  function addEncyclopediaEntry(entry) {
+    const list = getEncyclopedia();
+    list.push(entry);
+    saveEncyclopedia(list);
   }
 
   return {
@@ -193,6 +170,8 @@ window.GardenManager = (function() {
     addPlant,
     updatePlant,
     deletePlant,
-    getEncyclopedia
+    getEncyclopedia,
+    saveEncyclopedia,
+    addEncyclopediaEntry
   };
 })();
