@@ -96,7 +96,7 @@
             <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
               [ 花種品種與花期細分 ]
             </h2>
-            <span id="varieties-count" class="badge badge-blue">載入中...</span>
+            <span id="varieties-count" class="badge badge-blue">0 個品種</span>
           </div>
 
           <div id="varieties-container" class="grid-2">
@@ -110,7 +110,7 @@
             <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
               [ 台灣賞花名勝景點庫 ]
             </h2>
-            <span id="spots-count" class="badge badge-green">載入中...</span>
+            <span id="spots-count" class="badge badge-green">0 個景點</span>
           </div>
 
           <div id="spots-container" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -186,7 +186,7 @@
 
   <!-- Page Specific Script -->
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       const elCategory = document.getElementById("filter-category");
       const elMonth = document.getElementById("filter-month");
       const elRegion = document.getElementById("filter-region");
@@ -232,6 +232,11 @@
       });
 
       updateUI();
+
+      if (window.supabaseClient) {
+        await window.FlowerPlanner.fetchFlowerDataAsync();
+        updateUI();
+      }
     });
 
     function renderVarietiesList(varieties) {
@@ -241,7 +246,7 @@
       countBadge.textContent = `${varieties.length} 個品種`;
 
       if (varieties.length === 0) {
-        container.innerHTML = `<div style="grid-column: span 2; padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">無符合條件的花卉品種</div>`;
+        container.innerHTML = `<div style="grid-column: span 2; padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">尚無花卉品種數據（可於 Supabase 隨時新增）</div>`;
         return;
       }
 
@@ -261,7 +266,7 @@
             ${v.features}
           </p>
           <div style="font-size: 0.8rem; color: var(--text-muted);">
-            代表景點：${v.spots.join("、")}
+            代表景點：${v.spots.join("、") || "尚無連結景點"}
           </div>
         </div>
       `).join("");
@@ -274,7 +279,7 @@
       countBadge.textContent = `${spots.length} 個景點`;
 
       if (spots.length === 0) {
-        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">無符合區域與花種的景點</div>`;
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">尚無賞花景點數據（可於 Supabase 隨時新增）</div>`;
         return;
       }
 

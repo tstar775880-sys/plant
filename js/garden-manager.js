@@ -1,6 +1,6 @@
 /**
  * Plant Hub - Garden & Plant Manager Module (Supabase + LocalStorage Hybrid)
- * Manages user's plant library with real-time Supabase Cloud DB sync and LocalStorage fallback.
+ * Manages user's plant library with real-time Supabase Cloud DB sync.
  */
 
 window.GardenManager = (function() {
@@ -44,63 +44,31 @@ window.GardenManager = (function() {
     }
   ];
 
-  const defaultPlants = [
-    {
-      id: "11111111-1111-1111-1111-111111111111",
-      name: "小龜龜",
-      species: "龜背竹 (Monstera)",
-      purchaseDate: "2026-05-10",
-      waterInterval: 5,
-      lastWatered: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
-      location: "客廳窗台",
-      notes: "葉片已開裂第4片，生長狀況良好。"
-    },
-    {
-      id: "22222222-2222-2222-2222-222222222222",
-      name: "玄關琴葉榕",
-      species: "琴葉榕 (Fiddle-leaf Fig)",
-      purchaseDate: "2026-03-15",
-      waterInterval: 7,
-      lastWatered: new Date(Date.now() - 10 * 86400000).toISOString().split('T')[0],
-      location: "玄關入口",
-      notes: "上個月曾經因澆水過多導致底部老葉黃化掉落，現已調整水分。"
-    },
-    {
-      id: "33333333-3333-3333-3333-333333333333",
-      name: "陽台迷你山櫻",
-      species: "櫻花盆栽 (Mini Cherry)",
-      purchaseDate: "2026-01-20",
-      waterInterval: 2,
-      lastWatered: new Date(Date.now() - 1 * 86400000).toISOString().split('T')[0],
-      location: "戶外陽台",
-      notes: "正值夏季營養生長階段，枝葉茂盛。"
-    }
-  ];
-
-  // In-memory cache for fast UI rendering
+  const defaultPlants = [];
   let memoryPlantsCache = null;
 
   function getLocalPlants() {
     const data = localStorage.getItem(STORAGE_KEY_PLANTS);
-    if (!data) {
-      localStorage.setItem(STORAGE_KEY_PLANTS, JSON.stringify(defaultPlants));
+    if (!data) return defaultPlants;
+    try {
+      const parsed = JSON.parse(data);
+      // Filter out old mock IDs
+      return parsed.filter(p => !p.id.includes("plant_1") && !p.id.includes("plant_2") && !p.id.includes("plant_3"));
+    } catch (e) {
       return defaultPlants;
     }
-    try { return JSON.parse(data); } catch (e) { return defaultPlants; }
   }
 
   function saveLocalPlants(plants) {
     localStorage.setItem(STORAGE_KEY_PLANTS, JSON.stringify(plants));
   }
 
-  // Synchronous getter for quick UI rendering
   function getPlants() {
     if (memoryPlantsCache) return memoryPlantsCache;
     memoryPlantsCache = getLocalPlants();
     return memoryPlantsCache;
   }
 
-  // Async fetch from Supabase Database
   async function fetchPlantsAsync() {
     if (window.supabaseClient) {
       try {
@@ -109,8 +77,7 @@ window.GardenManager = (function() {
           .select("*")
           .order("created_at", { ascending: true });
 
-        if (!error && data && data.length > 0) {
-          // Map database snake_case to frontend camelCase
+        if (!error && data !== null) {
           const mapped = data.map(p => ({
             id: p.id,
             name: p.name,
@@ -126,14 +93,13 @@ window.GardenManager = (function() {
           return mapped;
         }
       } catch (err) {
-        console.warn("[GardenManager] Supabase fetch error, using local data", err);
+        console.warn("[GardenManager] Supabase fetch error", err);
       }
     }
     memoryPlantsCache = getLocalPlants();
     return memoryPlantsCache;
   }
 
-  // Add new plant to Supabase & LocalStorage
   async function addPlant(plantData) {
     const newPlant = {
       id: (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : "plant_" + Date.now(),
@@ -146,13 +112,11 @@ window.GardenManager = (function() {
       notes: plantData.notes || ""
     };
 
-    // Save to Local Cache
     const plants = getPlants();
     plants.push(newPlant);
     memoryPlantsCache = plants;
     saveLocalPlants(plants);
 
-    // Sync to Supabase Cloud DB
     if (window.supabaseClient) {
       try {
         await window.supabaseClient.from("garden_plants").insert({
@@ -165,7 +129,6 @@ window.GardenManager = (function() {
           location: newPlant.location,
           notes: newPlant.notes
         });
-        console.log("[GardenManager] Synced new plant to Supabase Cloud:", newPlant.name);
       } catch (e) {
         console.warn("[GardenManager] Cloud sync error", e);
       }
@@ -174,7 +137,6 @@ window.GardenManager = (function() {
     return newPlant;
   }
 
-  // Update plant
   async function updatePlant(plantId, updatedFields) {
     const plants = getPlants();
     const idx = plants.findIndex(p => p.id === plantId);
@@ -197,7 +159,6 @@ window.GardenManager = (function() {
             .from("garden_plants")
             .update(dbPayload)
             .eq("id", plantId);
-          console.log("[GardenManager] Updated plant in Supabase Cloud:", plantId);
         } catch (e) {
           console.warn("[GardenManager] Cloud update error", e);
         }
@@ -207,7 +168,6 @@ window.GardenManager = (function() {
     return null;
   }
 
-  // Delete plant
   async function deletePlant(plantId) {
     let plants = getPlants();
     plants = plants.filter(p => p.id !== plantId);
@@ -217,7 +177,6 @@ window.GardenManager = (function() {
     if (window.supabaseClient) {
       try {
         await window.supabaseClient.from("garden_plants").delete().eq("id", plantId);
-        console.log("[GardenManager] Deleted plant from Supabase Cloud:", plantId);
       } catch (e) {
         console.warn("[GardenManager] Cloud delete error", e);
       }

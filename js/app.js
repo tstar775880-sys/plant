@@ -3,7 +3,10 @@
  * Initializes shared UI components, handles nav states, and populates dashboard widgets.
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  // Purge old mock data from LocalStorage if present
+  clearOldMockLocalStorage();
+
   // Highlight active nav link
   const currentPath = window.location.pathname.split("/").pop() || "index.html";
   const navLinks = document.querySelectorAll(".nav-link");
@@ -20,11 +23,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (window.testWateringLogic) window.testWateringLogic();
   if (window.testFlowerCalculator) window.testFlowerCalculator();
 
-  // If on Index page, update dashboard stats
+  // If on Index page, async fetch and update dashboard stats
   if (document.getElementById("dashboard-stats")) {
+    if (window.supabaseClient) {
+      await window.GardenManager.fetchPlantsAsync();
+      await window.JournalManager.fetchLogsAsync();
+      await window.FlowerPlanner.fetchFlowerDataAsync();
+    }
     initDashboard();
   }
 });
+
+function clearOldMockLocalStorage() {
+  const pData = localStorage.getItem("planthub_my_plants");
+  if (pData && (pData.includes("plant_1") || pData.includes("plant_2") || pData.includes("plant_3"))) {
+    localStorage.removeItem("planthub_my_plants");
+  }
+  const lData = localStorage.getItem("planthub_journal_logs");
+  if (lData && (lData.includes("log_1") || lData.includes("log_2"))) {
+    localStorage.removeItem("planthub_journal_logs");
+  }
+}
 
 function initDashboard() {
   const schedule = window.WateringTracker.getWateringSchedule();
@@ -90,10 +109,9 @@ function renderDashboardWateringPreview(schedule) {
   `).join("");
 }
 
-function handleQuickWaterCheck(plantId, checkboxEl) {
+async function handleQuickWaterCheck(plantId, checkboxEl) {
   if (checkboxEl.checked) {
-    window.WateringTracker.markAsWatered(plantId);
-    // Re-init dashboard
+    await window.WateringTracker.markAsWatered(plantId);
     setTimeout(() => {
       initDashboard();
     }, 200);
