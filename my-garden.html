@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的植物園 & 澆水日誌 - Plant Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="brand-badge">PLANT HUB</span>
+        <span class="brand-title">台灣賞花與植物養護系統</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">首頁 Focus</a></li>
+        <li><a href="flower-guide.html" class="nav-link">賞花指南 & 行程規劃</a></li>
+        <li><a href="my-garden.html" class="nav-link active">我的植物園 & 澆水日誌</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    
+    <!-- Page Header -->
+    <header class="page-header" style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="page-category-tag">[ 個人植物庫 & 養護紀錄 ]</span>
+        <h1 class="page-title">我的植物園、週期給水與問題日誌</h1>
+        <p class="page-subtitle">
+          追蹤栽培植物的補水週期（3天/5天/7天自訂），每日自動顯示待給水清單；記錄遭遇的問題與檢討心得（如澆水過多爛根失敗紀錄）。
+        </p>
+      </div>
+      <div>
+        <button id="btn-open-add-plant" class="btn btn-primary">+ 新增植物庫存</button>
+        <button id="btn-open-add-log" class="btn btn-secondary" style="margin-left: 0.5rem;">+ 紀錄養護筆記/問題</button>
+      </div>
+    </header>
+
+    <!-- Section 1: Watering Routine Schedule (Today, Overdue, Upcoming) -->
+    <section class="card" style="margin-bottom: 2.5rem; background-color: var(--bg-surface);">
+      <div class="card-header">
+        <div>
+          <span class="badge badge-amber" style="margin-bottom: 0.4rem;">[ 給水任務控管 ]</span>
+          <h2 class="card-title">植物給水時程與今日勾選</h2>
+          <p class="card-subtitle">系統依自訂天數自動計算，完成澆水後勾選 Checkbox 即可自動更新下次日期並寫入紀錄</p>
+        </div>
+      </div>
+      <div class="card-body">
+        
+        <div class="tab-group" style="margin-bottom: 1.25rem;">
+          <button class="tab-btn active" onclick="switchWaterTab('all', this)">全部待補水</button>
+          <button class="tab-btn" onclick="switchWaterTab('urgent', this)">今日/已逾期</button>
+          <button class="tab-btn" onclick="switchWaterTab('upcoming', this)">未來預告</button>
+        </div>
+
+        <div id="watering-schedule-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Main Grid: My Plants Library & Care Journal -->
+    <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem;">
+      
+      <!-- My Plants Collection -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
+            [ 我的植物庫存 ]
+          </h2>
+          <span id="plants-count" class="badge badge-green">0 株</span>
+        </div>
+
+        <div id="my-plants-container" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Care Journal & Failure Logs -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
+            [ 養護日誌與問題筆記 ]
+          </h2>
+          <span id="journal-count" class="badge badge-pink">0 則</span>
+        </div>
+
+        <div id="journal-logs-container" style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Section 3: Plant Care Encyclopedia -->
+    <section class="card" style="background-color: var(--bg-surface);">
+      <div class="card-header">
+        <div>
+          <span class="badge badge-blue" style="margin-bottom: 0.4rem;">[ 養護參考手冊 ]</span>
+          <h2 class="card-title">常見植物養護指標與日照介質建議</h2>
+          <p class="card-subtitle">提供熱門園藝植物的澆水週期與照顧要領參考</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>植物品種</th>
+                <th>日照需求</th>
+                <th>建議給水週期</th>
+                <th>土壤介質建議</th>
+                <th>養護關鍵技巧</th>
+              </tr>
+            </thead>
+            <tbody id="encyclopedia-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal 1: Add/Edit Plant Modal -->
+  <div id="modal-plant" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">[ 新增植物庫存 ]</h3>
+        <button class="modal-close" onclick="closePlantModal()">關閉 [X]</button>
+      </div>
+      <form id="form-add-plant" onsubmit="handlePlantSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">[ 植物暱稱 / 標籤 ] *</label>
+          <input type="text" id="plant-input-name" class="form-control" placeholder="例如：陽台小龜、玄關琴葉榕" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">[ 植物品種 / 學名 ]</label>
+          <input type="text" id="plant-input-species" class="form-control" placeholder="例如：龜背竹、琴葉榕、虎尾蘭、櫻花盆栽">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">[ 購置/開始栽培日期 ]</label>
+            <input type="date" id="plant-input-date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">[ 給水週期 (天數) ] *</label>
+            <input type="number" id="plant-input-interval" class="form-control" min="1" max="90" value="5" required>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">例如：3天/5天/7天/14天給水一次</span>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">[ 最近一次給水日期 ] *</label>
+            <input type="date" id="plant-input-lastwatered" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">[ 擺放位置 ]</label>
+            <input type="text" id="plant-input-location" class="form-control" placeholder="例如：客廳窗台、陽台東側">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">[ 栽培備註 ]</label>
+          <textarea id="plant-input-notes" class="form-control" placeholder="紀錄盆栽尺寸、土壤介質成分或生長狀態..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closePlantModal()">取消</button>
+          <button type="submit" class="btn btn-primary">儲存植物資料</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Add Journal Log Modal -->
+  <div id="modal-log" class="modal-overlay">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title">[ 新增養護日誌 / 失敗問題紀錄 ]</h3>
+        <button class="modal-close" onclick="closeLogModal()">關閉 [X]</button>
+      </div>
+      <form id="form-add-log" onsubmit="handleLogSubmit(event)">
+        <div class="form-group">
+          <label class="form-label">[ 關聯植物 ]</label>
+          <select id="log-input-plant" class="form-select">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">[ 紀錄日期 ] *</label>
+            <input type="date" id="log-input-date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">[ 紀錄類別 ] *</label>
+            <select id="log-input-category" class="form-select" required>
+              <option value="ISSUE_WATER">水分問題 (水過多爛根/缺水)</option>
+              <option value="WATERING">水分管理 (例行澆水)</option>
+              <option value="PEST">病蟲害防制</option>
+              <option value="REPOTTING">換盆與土壤介質</option>
+              <option value="FERTILIZER">施肥紀錄</option>
+              <option value="GENERAL">日常觀察與紀錄</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">[ 事件/問題標題 ] *</label>
+          <input type="text" id="log-input-title" class="form-control" placeholder="例如：水加太多導致底葉發黃掉落" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">[ 詳細過程與狀況描述 ]</label>
+          <textarea id="log-input-content" class="form-control" placeholder="詳細描述遇到什麼問題、症狀、處置過程..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">[ 檢討經驗與改善教訓 (Lessons Learned) ]</label>
+          <textarea id="log-input-lesson" class="form-control" placeholder="例如：下次琴葉榕表土未乾透前絕不補水；改善積水環境..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeLogModal()">取消</button>
+          <button type="submit" class="btn btn-primary">儲存日誌紀錄</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <strong>Plant Hub 台灣賞花與植物養護系統</strong>
+        <span style="margin: 0 0.5rem; color: var(--border-light);">|</span>
+        <span>無 Icon / 無 Emoji 植物園控管面板</span>
+      </div>
+      <div>
+        <span class="footer-tag">Git Remote: https://github.com/tstar775880-sys/plant.git</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/flower-data.js"></script>
+  <script src="js/flower-planner.js"></script>
+  <script src="js/garden-manager.js"></script>
+  <script src="js/journal-manager.js"></script>
+  <script src="test_watering_logic.js"></script>
+  <script src="test_flower_calculator.js"></script>
+  <script src="js/watering-tracker.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page Logic Script -->
+  <script>
+    let currentWaterTab = "all";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Pre-fill today dates in forms
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("plant-input-date").value = today;
+      document.getElementById("plant-input-lastwatered").value = today;
+      document.getElementById("log-input-date").value = today;
+
+      // Event listeners for open modal buttons
+      document.getElementById("btn-open-add-plant").addEventListener("click", openPlantModal);
+      document.getElementById("btn-open-add-log").addEventListener("click", openLogModal);
+
+      refreshPageData();
+    });
+
+    function refreshPageData() {
+      renderWateringSchedule();
+      renderMyPlants();
+      renderJournalLogs();
+      renderEncyclopedia();
+    }
+
+    function switchWaterTab(tabKey, btnEl) {
+      currentWaterTab = tabKey;
+      const tabBtns = btnEl.parentElement.querySelectorAll(".tab-btn");
+      tabBtns.forEach(b => b.classList.remove("active"));
+      btnEl.classList.add("active");
+      renderWateringSchedule();
+    }
+
+    function renderWateringSchedule() {
+      const container = document.getElementById("watering-schedule-list");
+      const schedule = window.WateringTracker.getWateringSchedule();
+
+      let list = [];
+      if (currentWaterTab === "urgent") {
+        list = [...schedule.overdue, ...schedule.today];
+      } else if (currentWaterTab === "upcoming") {
+        list = schedule.upcoming;
+      } else {
+        list = [...schedule.overdue, ...schedule.today, ...schedule.upcoming, ...schedule.normal];
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `<div style="padding: 1.5rem; text-align: center; color: var(--text-muted);">該分頁暫無需要處理的給水項目</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(item => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.25rem;">
+              <span style="font-weight: 700; font-size: 1.05rem; color: var(--text-primary);">${item.name}</span>
+              <span class="badge badge-gray">${item.species}</span>
+              <span class="badge ${item.wateringStatus.badgeClass}">${item.wateringStatus.statusText}</span>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-secondary);">
+              上次給水：${item.lastWatered} | 自訂週期：${item.waterInterval} 天 | 下次給水：${item.wateringStatus.nextWateringDate} | 位置：${item.location}
+            </div>
+          </div>
+          <div>
+            <label class="custom-checkbox">
+              <input type="checkbox" onchange="handleWaterCheck('${item.id}', this)">
+              <span style="font-size: 0.9rem; font-weight: 600; color: var(--accent-green-bright);">完成今日澆水</span>
+            </label>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function handleWaterCheck(plantId, checkboxEl) {
+      if (checkboxEl.checked) {
+        window.WateringTracker.markAsWatered(plantId);
+        setTimeout(() => {
+          refreshPageData();
+        }, 200);
+      }
+    }
+
+    function renderMyPlants() {
+      const container = document.getElementById("my-plants-container");
+      const badge = document.getElementById("plants-count");
+      const plants = window.GardenManager.getPlants();
+
+      badge.textContent = `${plants.length} 株`;
+
+      if (plants.length === 0) {
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md);">尚未新增植物</div>`;
+        return;
+      }
+
+      container.innerHTML = plants.map(p => `
+        <div class="card" style="padding: 1.25rem;">
+          <div class="card-header" style="margin-bottom: 0.4rem;">
+            <div>
+              <span class="badge badge-teal" style="margin-bottom: 0.3rem;">[ 週期: ${p.waterInterval} 天 ]</span>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">${p.name}</h3>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="handleDeletePlant('${p.id}')">刪除</button>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            品種：${p.species} | 購置日期：${p.purchaseDate} | 位置：${p.location}
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); background: var(--bg-surface); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            備註：${p.notes || "尚無備註"}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderJournalLogs() {
+      const container = document.getElementById("journal-logs-container");
+      const badge = document.getElementById("journal-count");
+      const logs = window.JournalManager.getLogs();
+      const categories = window.JournalManager.getCategories();
+
+      badge.textContent = `${logs.length} 則`;
+
+      if (logs.length === 0) {
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted); background: var(--bg-surface); border-radius: var(--radius-md);">尚無養護或問題紀錄</div>`;
+        return;
+      }
+
+      container.innerHTML = logs.map(l => {
+        const catObj = categories.find(c => c.id === l.category) || categories[5];
+        return `
+          <div class="card" style="padding: 1.25rem; background-color: var(--bg-surface);">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem;">
+              <div>
+                <span class="badge ${catObj.badgeClass}" style="margin-bottom: 0.3rem;">${catObj.name}</span>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary);">${l.title}</h3>
+              </div>
+              <button class="btn btn-danger btn-sm" onclick="handleDeleteLog('${l.id}')">刪除</button>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--accent-teal); margin-bottom: 0.5rem;">
+              關聯植物：${l.plantName} | 紀錄日期：${l.date}
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+              ${l.content}
+            </p>
+            ${l.lesson ? `
+              <div style="font-size: 0.8rem; color: var(--accent-rose); background: rgba(244,63,94,0.1); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(244,63,94,0.2);">
+                <strong>檢討經驗/教訓：</strong>${l.lesson}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderEncyclopedia() {
+      const tbody = document.getElementById("encyclopedia-table-body");
+      const list = window.GardenManager.getEncyclopedia();
+      tbody.innerHTML = list.map(item => `
+        <tr>
+          <td style="font-weight: 600; color: var(--accent-green-bright);">${item.species}</td>
+          <td>${item.sunlight}</td>
+          <td><span class="badge badge-blue">${item.waterInterval} 天/次</span></td>
+          <td>${item.soil}</td>
+          <td style="color: var(--text-secondary); font-size: 0.85rem;">${item.careTips}</td>
+        </tr>
+      `).join("");
+    }
+
+    // Modal Control Functions
+    function openPlantModal() {
+      document.getElementById("modal-plant").classList.add("active");
+    }
+    function closePlantModal() {
+      document.getElementById("modal-plant").classList.remove("active");
+    }
+
+    function openLogModal() {
+      // Populate plant select options
+      const select = document.getElementById("log-input-plant");
+      const plants = window.GardenManager.getPlants();
+      select.innerHTML = plants.map(p => `<option value="${p.id}" data-name="${p.name}">${p.name} (${p.species})</option>`).join("");
+      document.getElementById("modal-log").classList.add("active");
+    }
+    function closeLogModal() {
+      document.getElementById("modal-log").classList.remove("active");
+    }
+
+    function handlePlantSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById("plant-input-name").value;
+      const species = document.getElementById("plant-input-species").value;
+      const purchaseDate = document.getElementById("plant-input-date").value;
+      const waterInterval = document.getElementById("plant-input-interval").value;
+      const lastWatered = document.getElementById("plant-input-lastwatered").value;
+      const location = document.getElementById("plant-input-location").value;
+      const notes = document.getElementById("plant-input-notes").value;
+
+      window.GardenManager.addPlant({
+        name, species, purchaseDate, waterInterval, lastWatered, location, notes
+      });
+
+      closePlantModal();
+      refreshPageData();
+    }
+
+    function handleLogSubmit(e) {
+      e.preventDefault();
+      const select = document.getElementById("log-input-plant");
+      const selectedOption = select.options[select.selectedIndex];
+      const plantId = select.value;
+      const plantName = selectedOption ? selectedOption.getAttribute("data-name") : "通用植物";
+
+      const date = document.getElementById("log-input-date").value;
+      const category = document.getElementById("log-input-category").value;
+      const title = document.getElementById("log-input-title").value;
+      const content = document.getElementById("log-input-content").value;
+      const lesson = document.getElementById("log-input-lesson").value;
+
+      window.JournalManager.addLog({
+        plantId, plantName, date, category, title, content, lesson
+      });
+
+      closeLogModal();
+      refreshPageData();
+    }
+
+    function handleDeletePlant(plantId) {
+      if (confirm("確定要刪除此植物資料嗎？")) {
+        window.GardenManager.deletePlant(plantId);
+        refreshPageData();
+      }
+    }
+
+    function handleDeleteLog(logId) {
+      if (confirm("確定要刪除此筆養護日誌嗎？")) {
+        window.JournalManager.deleteLog(logId);
+        refreshPageData();
+      }
+    }
+  </script>
+
+</body>
+</html>

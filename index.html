@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plant Hub - 台灣賞花與植物養護系統</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="brand-badge">PLANT HUB</span>
+        <span class="brand-title">台灣賞花與植物養護系統</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">首頁 Focus</a></li>
+        <li><a href="flower-guide.html" class="nav-link">賞花指南 & 行程規劃</a></li>
+        <li><a href="my-garden.html" class="nav-link">我的植物園 & 澆水日誌</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    
+    <!-- Hero Banner -->
+    <header class="page-header">
+      <span class="page-category-tag">[ 系統主控台 Portal ]</span>
+      <h1 class="page-title">台灣賞花地圖與個人植物養護指南</h1>
+      <p class="page-subtitle">
+        掌握台灣四季花期與熱門賞花景點行程，同步管理個人植物庫、定時給水提醒與養護經驗筆記。
+      </p>
+    </header>
+
+    <!-- Dashboard Quick Statistics -->
+    <section id="dashboard-stats" class="grid-4" style="margin-bottom: 2rem;">
+      <div class="stat-card warning">
+        <div class="stat-label">[ 今日待給水 ]</div>
+        <div id="stat-watering-today" class="stat-value">0</div>
+        <div class="stat-desc">包含今日到期與過期植物</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">[ 我的植物總數 ]</div>
+        <div id="stat-total-plants" class="stat-value">0</div>
+        <div class="stat-desc">個人園藝庫已登記株數</div>
+      </div>
+      <div class="stat-card info">
+        <div class="stat-label">[ 當月盛開花種 ]</div>
+        <div id="stat-blooming-now" class="stat-value">0</div>
+        <div class="stat-desc">台灣本月最佳賞花品種</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">[ 養護經驗筆記 ]</div>
+        <div id="stat-journal-logs" class="stat-value">0</div>
+        <div class="stat-desc">問題紀錄與失敗經驗檔</div>
+      </div>
+    </section>
+
+    <!-- Quick Today Watering Checklist Section -->
+    <section class="card" style="margin-bottom: 2.5rem; background-color: var(--bg-surface);">
+      <div class="card-header">
+        <div>
+          <span class="badge badge-amber" style="margin-bottom: 0.4rem;">[ 每日例行任務 ]</span>
+          <h2 class="card-title">今日需要給水的植物清單</h2>
+          <p class="card-subtitle">澆水後勾選即可自動更新下次給水日期並寫入養護歷史</p>
+        </div>
+        <a href="my-garden.html" class="btn btn-secondary btn-sm">前往植物園管理</a>
+      </div>
+      <div class="card-body">
+        <div id="dashboard-watering-preview">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Feature Modules Gateways -->
+    <section class="grid-2">
+      
+      <!-- Feature Gateway 1: Flower Season & Spots -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge badge-pink">[ 假期賞花規劃 ]</span>
+            <h2 class="card-title" style="margin-top: 0.4rem;">台灣賞花指南 & 行程規劃</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom: 1rem;">
+            專為休假規劃設計！查詢台灣 1-12 月盛開花種與品種細分（例如櫻花細分山櫻花、八重櫻、吉野櫻、富士櫻；梅花細分角板山白梅與綠萼梅）。
+          </p>
+          <ul style="list-style: none; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <li style="margin-bottom: 0.4rem;">• <strong>品種花期時間軸</strong>：依月份與開花狀態精準篩選。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>全台賞花景點庫</strong>：陽明山、武陵農場、阿里山、信義梅園等。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>出遊行程規劃器</strong>：輕鬆建立假期賞花路線。</li>
+          </ul>
+          <a href="flower-guide.html" class="btn btn-primary" style="width: 100%;">開啟賞花指南與行程規劃</a>
+        </div>
+      </article>
+
+      <!-- Feature Gateway 2: Plant Care & Journal -->
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <span class="badge badge-green">[ 個人園藝日誌 ]</span>
+            <h2 class="card-title" style="margin-top: 0.4rem;">我的植物園 & 養護紀錄</h2>
+          </div>
+        </div>
+        <div class="card-body">
+          <p style="margin-bottom: 1rem;">
+            紀錄您目前栽種的花草植物，設定專屬澆水週期（如 3 天、5 天、7 天），並詳細記錄栽培遇到的各種問題與檢討教訓。
+          </p>
+          <ul style="list-style: none; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
+            <li style="margin-bottom: 0.4rem;">• <strong>植物庫與養護百科</strong>：栽培要領與光照土壤建議。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>澆水週期自動計算</strong>：防錯過給水或過度給水。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>養植問題與失敗紀錄</strong>：紀錄水多爛根、施肥、病蟲害檢討。</li>
+          </ul>
+          <a href="my-garden.html" class="btn btn-primary" style="width: 100%;">開啟我的植物園與日誌</a>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <strong>Plant Hub 台灣賞花與植物養護系統</strong>
+        <span style="margin: 0 0.5rem; color: var(--border-light);">|</span>
+        <span>設計規範：無 Icon / 無 Emoji 現代簡約風</span>
+      </div>
+      <div>
+        <span class="footer-tag">Git Remote: https://github.com/tstar775880-sys/plant.git</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/flower-data.js"></script>
+  <script src="js/flower-planner.js"></script>
+  <script src="js/garden-manager.js"></script>
+  <script src="js/journal-manager.js"></script>
+  <script src="test_watering_logic.js"></script>
+  <script src="test_flower_calculator.js"></script>
+  <script src="js/watering-tracker.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

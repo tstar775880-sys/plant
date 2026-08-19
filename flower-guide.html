@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>台灣賞花指南 & 行程規劃 - Plant Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <span class="brand-badge">PLANT HUB</span>
+        <span class="brand-title">台灣賞花與植物養護系統</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">首頁 Focus</a></li>
+        <li><a href="flower-guide.html" class="nav-link active">賞花指南 & 行程規劃</a></li>
+        <li><a href="my-garden.html" class="nav-link">我的植物園 & 澆水日誌</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-layout">
+    
+    <!-- Page Header -->
+    <header class="page-header">
+      <span class="page-category-tag">[ 台灣賞花指南 & 出遊規劃 ]</span>
+      <h1 class="page-title">四季花期、品種細分與賞花景點資料庫</h1>
+      <p class="page-subtitle">
+        提供台灣各地熱門花種花期資訊。針對櫻花細分山櫻花、八重櫻、吉野櫻與富士櫻；梅花細分白梅與綠萼梅。放假不知道去哪裡？一鍵查詢當月盛開景點並排定出遊行程！
+      </p>
+    </header>
+
+    <!-- Filter Controls Bar -->
+    <section class="filter-bar">
+      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+        <label class="form-label" style="margin-bottom: 0;">[ 花種分類 ]</label>
+        <select id="filter-category" class="form-select" style="min-width: 150px;">
+          <option value="all">全部分類</option>
+          <option value="cherry_blossom">櫻花 (細分品種)</option>
+          <option value="plum_blossom">梅花 (細分品種)</option>
+          <option value="tung_flower">油桐花</option>
+          <option value="hydrangea">繡球花</option>
+          <option value="daylily">金針花</option>
+        </select>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+        <label class="form-label" style="margin-bottom: 0;">[ 出遊/賞花月份 ]</label>
+        <select id="filter-month" class="form-select" style="min-width: 130px;">
+          <option value="all">全年 12 個月</option>
+          <option value="1">1 月 (寒梅/山櫻)</option>
+          <option value="2">2 月 (八重櫻/富士櫻)</option>
+          <option value="3">3 月 (吉野櫻極盛)</option>
+          <option value="4">4 月 (吉野櫻/油桐花)</option>
+          <option value="5">5 月 (油桐花/繡球花)</option>
+          <option value="6">6 月 (繡球花盛開)</option>
+          <option value="7">7 月 (高山花卉)</option>
+          <option value="8">8 月 (金針花季)</option>
+          <option value="9">9 月 (金針花極盛)</option>
+          <option value="10">10 月 (秋季景觀)</option>
+          <option value="11">11 月 (楓葉季準備)</option>
+          <option value="12">12 月 (角板山白梅)</option>
+        </select>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+        <label class="form-label" style="margin-bottom: 0;">[ 台灣地區 ]</label>
+        <select id="filter-region" class="form-select" style="min-width: 130px;">
+          <option value="all">全台灣地區</option>
+          <option value="north">北部 (基北北桃竹)</option>
+          <option value="central">中部 (苗台中彰投)</option>
+          <option value="south">南部 (雲嘉南高屏)</option>
+          <option value="east">東部 (宜花東)</option>
+        </select>
+      </div>
+
+      <div style="margin-left: auto; display: flex; align-items: flex-end;">
+        <button id="btn-reset-filters" class="btn btn-secondary btn-sm">重設篩選條件</button>
+      </div>
+    </section>
+
+    <!-- Main Content Layout: Grid (2/3 Varieties & Spots, 1/3 Trip Planner) -->
+    <div class="grid-3" style="grid-template-columns: 2fr 1fr; gap: 2rem;">
+      
+      <!-- Left Column: Varieties & Spots List -->
+      <div>
+        
+        <!-- Section 1: Varieties Breakdown -->
+        <div style="margin-bottom: 2.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
+              [ 花種品種與花期細分 ]
+            </h2>
+            <span id="varieties-count" class="badge badge-blue">載入中...</span>
+          </div>
+
+          <div id="varieties-container" class="grid-2">
+            <!-- Rendered by flower-guide.js -->
+          </div>
+        </div>
+
+        <!-- Section 2: Famous Spots Library -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
+              [ 台灣賞花名勝景點庫 ]
+            </h2>
+            <span id="spots-count" class="badge badge-green">載入中...</span>
+          </div>
+
+          <div id="spots-container" style="display: flex; flex-direction: column; gap: 1rem;">
+            <!-- Rendered by flower-guide.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Out-of-town Trip Itinerary Planner -->
+      <aside>
+        <div class="card" style="position: sticky; top: 90px; background-color: var(--bg-surface);">
+          <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
+            <span class="badge badge-pink">[ 出遊規劃器 ]</span>
+            <h2 class="card-title">賞花假期行程表</h2>
+            <p class="card-subtitle">從左側景點點擊「加入行程」，排定休假賞花路線。</p>
+          </div>
+
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">[ 預計出遊日期 ]</label>
+              <input type="date" id="trip-date-input" class="form-control">
+            </div>
+
+            <div style="margin-top: 1.25rem;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                已排定景點與順序：
+              </div>
+              <div id="itinerary-list" class="timeline">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
+              <button id="btn-print-itinerary" class="btn btn-secondary btn-sm" style="flex: 1;">列印 / 匯出行程</button>
+              <button id="btn-clear-itinerary" class="btn btn-danger btn-sm">清空</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div>
+        <strong>Plant Hub 台灣賞花與植物養護系統</strong>
+        <span style="margin: 0 0.5rem; color: var(--border-light);">|</span>
+        <span>無 Icon / 無 Emoji 獨立模組頁面</span>
+      </div>
+      <div>
+        <span class="footer-tag">Git Remote: https://github.com/tstar775880-sys/plant.git</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/flower-data.js"></script>
+  <script src="js/flower-planner.js"></script>
+  <script src="js/garden-manager.js"></script>
+  <script src="js/journal-manager.js"></script>
+  <script src="test_watering_logic.js"></script>
+  <script src="test_flower_calculator.js"></script>
+  <script src="js/watering-tracker.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Page Specific Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const elCategory = document.getElementById("filter-category");
+      const elMonth = document.getElementById("filter-month");
+      const elRegion = document.getElementById("filter-region");
+      const elBtnReset = document.getElementById("btn-reset-filters");
+
+      const elTripDate = document.getElementById("trip-date-input");
+      if (elTripDate) {
+        elTripDate.value = new Date().toISOString().split('T')[0];
+      }
+
+      function updateUI() {
+        const cat = elCategory.value;
+        const month = elMonth.value;
+        const region = elRegion.value;
+
+        // Render Varieties
+        const varieties = window.FlowerPlanner.filterVarieties(cat, month);
+        renderVarietiesList(varieties);
+
+        // Render Spots
+        const spots = window.FlowerPlanner.filterSpots(region, cat);
+        renderSpotsList(spots);
+
+        // Render Itinerary
+        renderItineraryList();
+      }
+
+      elCategory.addEventListener("change", updateUI);
+      elMonth.addEventListener("change", updateUI);
+      elRegion.addEventListener("change", updateUI);
+
+      elBtnReset.addEventListener("click", () => {
+        elCategory.value = "all";
+        elMonth.value = "all";
+        elRegion.value = "all";
+        updateUI();
+      });
+
+      document.getElementById("btn-clear-itinerary").addEventListener("click", () => {
+        window.FlowerPlanner.saveItinerary([]);
+        renderItineraryList();
+      });
+
+      document.getElementById("btn-print-itinerary").addEventListener("click", () => {
+        window.print();
+      });
+
+      updateUI();
+    });
+
+    function renderVarietiesList(varieties) {
+      const container = document.getElementById("varieties-container");
+      const countBadge = document.getElementById("varieties-count");
+
+      countBadge.textContent = `${varieties.length} 個品種`;
+
+      if (varieties.length === 0) {
+        container.innerHTML = `<div style="grid-column: span 2; padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">無符合條件的花卉品種</div>`;
+        return;
+      }
+
+      container.innerHTML = varieties.map(v => `
+        <div class="card" style="padding: 1.25rem;">
+          <div class="card-header" style="margin-bottom: 0.5rem;">
+            <div>
+              <span class="badge ${v.badgeClass}" style="margin-bottom: 0.3rem;">${v.statusText}</span>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">${v.varietyName}</h3>
+            </div>
+            <span class="badge badge-gray">${v.categoryName}</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 600; margin-bottom: 0.4rem;">
+            花期：${v.mainSeason} (極盛：${v.peakMonth}月) | 花色：${v.colorTag}
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            ${v.features}
+          </p>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            代表景點：${v.spots.join("、")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderSpotsList(spots) {
+      const container = document.getElementById("spots-container");
+      const countBadge = document.getElementById("spots-count");
+
+      countBadge.textContent = `${spots.length} 個景點`;
+
+      if (spots.length === 0) {
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">無符合區域與花種的景點</div>`;
+        return;
+      }
+
+      container.innerHTML = spots.map(s => `
+        <div class="card" style="padding: 1.25rem; background-color: var(--bg-surface);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.5rem;">
+            <div>
+              <span class="badge badge-blue" style="margin-bottom: 0.3rem;">${s.regionName}</span>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">${s.name}</h3>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="handleAddToItinerary('${s.id}')">+ 加入假期行程</button>
+          </div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+            位置：${s.location} | 建議停留：${s.suggestedDuration} | 最佳月份：${s.bestMonths.join("月、")}月
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem;">
+            ${s.description}
+          </p>
+          <div style="font-size: 0.8rem; color: var(--accent-amber); background: rgba(245,158,11,0.1); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.2);">
+            出遊建議：${s.tips}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function handleAddToItinerary(spotId) {
+      const tripDate = document.getElementById("trip-date-input").value;
+      const res = window.FlowerPlanner.addSpotToItinerary(spotId, tripDate);
+      if (res) {
+        renderItineraryList();
+      } else {
+        alert("此景點已在您的行程清單中！");
+      }
+    }
+
+    function renderItineraryList() {
+      const container = document.getElementById("itinerary-list");
+      const items = window.FlowerPlanner.getSavedItinerary();
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div style="padding: 1rem 0; color: var(--text-muted); font-size: 0.85rem; text-align: center;">
+            尚未加入任何景點。<br>點擊景點卡片的「+ 加入假期行程」即可排定！
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map((item, idx) => `
+        <div class="timeline-item">
+          <div class="timeline-time">第 ${idx + 1} 站 | ${item.regionName}</div>
+          <div class="timeline-title">${item.spotName}</div>
+          <div class="timeline-desc">建議停留 ${item.suggestedDuration}</div>
+          <button class="btn btn-danger btn-sm" onclick="handleRemoveItinerary('${item.id}')" style="margin-top: 0.4rem; padding: 0.15rem 0.4rem; font-size: 0.75rem;">移除</button>
+        </div>
+      `).join("");
+    }
+
+    function handleRemoveItinerary(itinId) {
+      window.FlowerPlanner.removeSpotFromItinerary(itinId);
+      renderItineraryList();
+    }
+  </script>
+
+</body>
+</html>
