@@ -1,6 +1,6 @@
 # 台灣賞花與植物養護系統 (Plant Hub) - 開發紀錄與技術說明文件
 
-本專案 (`Plant Hub`) 是一個專為台灣賞花迷與個人植物養護者設計的現代化網頁應用系統。本文檔詳細記載系統發展架構、模組邏輯、設計規範、測試規則以及 Git / GitHub 部署流程。
+本專案 (`Plant Hub`) 是一個專為台灣賞花迷與個人植物養護者設計的現代化網頁應用系統。本文檔詳細記載系統發展架構、模組邏輯、設計規範、資料庫 DDL 規格、測試規則以及 Git / GitHub 部署流程。
 
 ---
 
@@ -28,6 +28,85 @@
 
 ---
 
+## Supabase PostgreSQL 資料庫結構說明 (Database Schema Documentation)
+
+完整 SQL 建表與註解檔位於：[supabase_schema.sql](supabase_schema.sql)
+
+### 模組 A：花季與賞花指南相關 (前綴 `flower_`)
+
+#### 1. 花種大分類表 (`flower_categories`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(50)` | **PRIMARY KEY** | 大分類識別碼 (如：`cherry_blossom`, `plum_blossom`) |
+| `name` | `VARCHAR(100)` | `NOT NULL` | 花種大分類中文名稱 (如：`櫻花`, `梅花`) |
+| `description` | `TEXT` | 可空 | 分類簡介與歷史背景說明 |
+| `main_season` | `VARCHAR(50)` | 可空 | 主要觀賞花期月份區間 (如：`1月 - 4月`) |
+| `created_at` | `TIMESTAMPTZ` | `DEFAULT NOW()` | 資料建立時間 |
+
+#### 2. 品種細分表 (`flower_varieties`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(50)` | **PRIMARY KEY** | 品種識別碼 (如：`yamazakura`, `yoshino`, `white_plum`) |
+| `category_id` | `VARCHAR(50)` | **FOREIGN KEY** (`flower_categories.id`) | 所屬大分類外鍵 |
+| `name` | `VARCHAR(100)` | `NOT NULL` | 品種中文名稱 (如：`山櫻花 (緋寒櫻)`, `吉野櫻`) |
+| `blooming_months`| `INT[]` | `NOT NULL` | 開花月份數字陣列 (如：`[1, 2]`) |
+| `peak_month` | `INT` | `NOT NULL` | 開花極盛期的月份數字 (如：`2`) |
+| `color_tag` | `VARCHAR(50)` | 可空 | 花色與特徵標籤 (如：`濃粉紅/深紅色`) |
+| `features` | `TEXT` | 可空 | 品種外型特徵與觀賞重點 |
+
+#### 3. 全台賞花名勝景點庫 (`flower_spots`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `VARCHAR(50)` | **PRIMARY KEY** | 景點識別碼 (如：`spot_pingjing`, `spot_wuling`) |
+| `category_id` | `VARCHAR(50)` | **FOREIGN KEY** (`flower_categories.id`) | 對應花種大分類外鍵 |
+| `variety_id` | `VARCHAR(50)` | **FOREIGN KEY** (`flower_varieties.id`) | 對應主力品種細分外鍵 |
+| `name` | `VARCHAR(150)` | `NOT NULL` | 景點名稱 (如：`陽明山平菁街42巷`) |
+| `region` | `VARCHAR(20)` | `NOT NULL` | 地區代碼 (`north`, `central`, `south`, `east`) |
+| `region_name` | `VARCHAR(50)` | `NOT NULL` | 地區顯示名稱 (如：`北部 (台北)`) |
+| `location` | `VARCHAR(255)`| `NOT NULL` | 景點詳細地址或導航位置 |
+| `best_months` | `INT[]` | `NOT NULL` | 最佳觀賞月份陣列 (如：`[1, 2]`) |
+| `suggested_duration` | `VARCHAR(50)`| 可空 | 建議停留時間 (如：`2小時`) |
+| `description` | `TEXT` | 可空 | 景點特色介紹與風景說明 |
+| `tips` | `TEXT` | 可空 | 出遊建議與交通注意事項 |
+
+#### 4. 賞花假期行程規劃表 (`flower_itineraries`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `UUID` | **PRIMARY KEY** | 行程項目主鍵 (自動產生 UUID) |
+| `spot_id` | `VARCHAR(50)` | **FOREIGN KEY** (`flower_spots.id`) | 關聯之景點外鍵 |
+| `trip_date` | `DATE` | `NOT NULL` | 預計出遊日期 (YYYY-MM-DD) |
+| `sort_order` | `INT` | `DEFAULT 1` | 行程順序 (第 1 站、第 2 站) |
+
+---
+
+### 模組 B：個人植物養護與紀錄相關 (前綴 `garden_`)
+
+#### 5. 個人栽培植物庫存表 (`garden_plants`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `UUID` | **PRIMARY KEY** | 植物主鍵 (自動產生 UUID) |
+| `name` | `VARCHAR(100)` | `NOT NULL` | 植物暱稱/自訂標籤 (如：`小龜龜`, `玄關琴葉榕`) |
+| `species` | `VARCHAR(100)` | `NOT NULL` | 植物品種學名 (如：`龜背竹 (Monstera)`) |
+| `purchase_date`| `DATE` | 可空 | 購置或開始栽培日期 |
+| `water_interval`| `INT` | `NOT NULL DEFAULT 3` | **自訂給水週期天數** (如：`3`, `5`, `7`) |
+| `last_watered` | `DATE` | `NOT NULL DEFAULT TODAY`| **最近一次給水日期** (用於計算今日給水提醒) |
+| `location` | `VARCHAR(100)` | 可空 | 擺放位置 (如：`客廳窗台`, `陽台東側`) |
+| `notes` | `TEXT` | 可空 | 栽培備註、介質成分與注意事項 |
+
+#### 6. 養護歷史與問題紀錄日誌表 (`garden_journal_logs`)
+| 欄位名稱 (Column) | 資料型態 (Type) | 鍵值 / 約束 | 中文說明與用途 (Description) |
+| :--- | :--- | :--- | :--- |
+| `id` | `UUID` | **PRIMARY KEY** | 日誌主鍵 (自動產生 UUID) |
+| `plant_id` | `UUID` | **FOREIGN KEY** (`garden_plants.id`) `ON DELETE CASCADE` | 關聯之植物外鍵 (植物刪除時連帶清理) |
+| `plant_name` | `VARCHAR(100)` | 可空 | 植物名稱快照 |
+| `date` | `DATE` | `NOT NULL` | 紀錄事件發生日期 |
+| `category` | `VARCHAR(50)` | `NOT NULL` | 紀錄分類代碼 (`ISSUE_WATER`, `PEST`, `FERTILIZER`, `REPOTTING`, `WATERING`, `GENERAL`) |
+| `title` | `VARCHAR(200)` | `NOT NULL` | 事件標題 (如：`澆水過多導致底部葉片發黃事故`) |
+| `content` | `TEXT` | 可空 | 詳細狀況、症狀與處置過程描述 |
+| `lesson` | `TEXT` | 可空 | **檢討教訓與改善經驗 (Lessons Learned)** |
+
+---
+
 ## 專案檔案架構
 
 ```
@@ -35,45 +114,21 @@ d:/python/plant/
 ├── index.html                    # 專案門戶 Portal (總覽儀表板、統計指標、今日給水捷徑)
 ├── flower-guide.html             # 台灣賞花指南、品種細分、景點庫與出遊行程規劃器
 ├── my-garden.html                # 我的植物園庫存、給水任務控管、養護日誌與養護百科
+├── supabase_schema.sql           # [Supabase SQL] 完整 DDL 建表指令、欄位中文註解與預載資料
 ├── css/
 │   └── style.css                 # 核心 CSS 設計系統 (無 Icon/Emoji, 純 CSS Badges & 幾何設計)
 ├── js/
 │   ├── app.js                    # 全局初始化、導覽列狀態控管、儀表板動態數據渲染
 │   ├── flower-data.js            # 台灣花期與景點權威資料庫 (品種細分、開花月份、建議出遊Tips)
-│   ├── flower-planner.js         # 賞花品種篩選器、景點比對與 LocalStorage 行程規劃器
+│   ├── flower-planner.js         # 賞花品種篩選器、景點比對與 LocalStorage/Supabase 行程規劃器
 │   ├── garden-manager.js         # 植物庫存管理 (CRUD)、養護百科資料與 LocalStorage 存取
 │   ├── watering-tracker.js       # 澆水週期演算法、給水狀態判斷與 Checkbox 勾選更新
 │   └── journal-manager.js        # 養護紀錄與失敗經驗日誌 (分類、搜尋、刪除)
 ├── test_watering_logic.js        # [測試檔案] 澆水週期、日期計算與狀態判斷測試腳本
 ├── test_flower_calculator.js     # [測試檔案] 花期月份比對與品種盛開計算測試腳本
 ├── DEVELOPMENT_LOG.md            # 詳細開發紀錄與技術說明文件 (本檔案)
-└── README.md                     # 專案介紹文件
+└── README.md                     # 專案說明文件
 ```
-
----
-
-## 關鍵模組開發細節
-
-### 1. 澆水週期計算邏輯 (`test_watering_logic.js` & `watering-tracker.js`)
-公式：`NextWateringDate = LastWateredDate + IntervalDays`
-- 當 `NextWateringDate < Today` -> `OVERDUE` (狀態標籤：`[已逾期 X 天]`, 色彩：`badge-rose`)
-- 當 `NextWateringDate == Today` -> `TODAY` (狀態標籤：`[今日需澆水]`, 色彩：`badge-amber`)
-- 當 `NextWateringDate - Today <= 3 Days` -> `UPCOMING` (狀態標籤：`[X 天後澆水]`, 色彩：`badge-blue`)
-
-**一鍵勾選處理流程**：
-1. 當使用者勾選 Checkbox，將植物的 `lastWatered` 更新為今日日期 (`YYYY-MM-DD`)。
-2. 自動呼叫 `JournalManager.addLog()` 寫入一篇「完成例行給水」養護日誌。
-3. 頁面無縫刷新，更新狀態標籤。
-
-### 2. 櫻花與梅花品種細分層級 (`flower-data.js`)
-- **櫻花大類 (`cherry_blossom`)**：
-  - `山櫻花 (緋寒櫻)`：1-2月，濃粉紅/深紅色，耐熱性佳。
-  - `八重櫻 (重瓣緋寒櫻)`：2-3月，深紫紅色，九族文化村/武陵農場代表。
-  - `吉野櫻`：3-4月，淡粉白，天元宮/阿里山代表。
-  - `富士櫻/昭和櫻`：2-3月，粉紅色，司馬庫斯代表。
-- **梅花大類 (`plum_blossom`)**：
-  - `角板山/信義白梅`：12-1月，雪白色，滿樹如雪。
-  - `綠萼梅 (萼綠梅)`：1-2月，白花綠萼，古風清香。
 
 ---
 
@@ -95,29 +150,8 @@ Remove-Item -Path .\test_* -Force
 本專案已連結至官方 GitHub 遠端倉庫：
 `https://github.com/tstar775880-sys/plant.git`
 
-### 首次推送與版控步驟指引：
 ```bash
-# 1. 初始化 Git 倉庫
-git init
-
-# 2. 設定遠端倉庫 URL
-git remote add origin https://github.com/tstar775880-sys/plant.git
-
-# 3. 變更預設分支為 main
-git branch -M main
-
-# 4. 加入所有專案檔案
 git add .
-
-# 5. 提交版本紀錄
-git commit -m "feat: 建立台灣賞花指南與植物養護系統 (Plant Hub) 完整介面與核心邏輯"
-
-# 6. 推送至 GitHub
-git push -u origin main
+git commit -m "docs: 新增 Supabase SQL 欄位註解與詳細資料庫結構文件"
+git push origin main
 ```
-
----
-
-## 總結
-
-`Plant Hub` 成功整合了台灣在地賞花情境與個人居家園藝的需求，在滿足無 Icon / 無 Emoji 限制的同時，創造出質感極高的視覺與使用體驗。

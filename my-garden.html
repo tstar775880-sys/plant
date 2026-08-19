@@ -32,7 +32,7 @@
         <span class="page-category-tag">[ 個人植物庫 & 養護紀錄 ]</span>
         <h1 class="page-title">我的植物園、週期給水與問題日誌</h1>
         <p class="page-subtitle">
-          追蹤栽培植物的補水週期（3天/5天/7天自訂），每日自動顯示待給水清單；記錄遭遇的問題與檢討心得（如澆水過多爛根失敗紀錄）。
+          追蹤栽培植物的補水週期（3天/5天/7天自訂），每日自動顯示待給水清單；紀錄遭遇的問題與檢討心得（如澆水過多爛根失敗紀錄）。
         </p>
       </div>
       <div>
@@ -41,13 +41,13 @@
       </div>
     </header>
 
-    <!-- Section 1: Watering Routine Schedule (Today, Overdue, Upcoming) -->
+    <!-- Section 1: Watering Routine Schedule -->
     <section class="card" style="margin-bottom: 2.5rem; background-color: var(--bg-surface);">
       <div class="card-header">
         <div>
           <span class="badge badge-amber" style="margin-bottom: 0.4rem;">[ 給水任務控管 ]</span>
           <h2 class="card-title">植物給水時程與今日勾選</h2>
-          <p class="card-subtitle">系統依自訂天數自動計算，完成澆水後勾選 Checkbox 即可自動更新下次日期並寫入紀錄</p>
+          <p class="card-subtitle">系統依自訂天數自動計算，完成澆水後勾選 Checkbox 即可自動寫入 Supabase 雲端資料庫</p>
         </div>
       </div>
       <div class="card-body">
@@ -133,7 +133,7 @@
   <div id="modal-plant" class="modal-overlay">
     <div class="modal-container">
       <div class="modal-header">
-        <h3 class="modal-title">[ 新增植物庫存 ]</h3>
+        <h3 class="modal-title">[ 新增植物庫存 (連動 Supabase) ]</h3>
         <button class="modal-close" onclick="closePlantModal()">關閉 [X]</button>
       </div>
       <form id="form-add-plant" onsubmit="handlePlantSubmit(event)">
@@ -172,7 +172,7 @@
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-secondary" onclick="closePlantModal()">取消</button>
-          <button type="submit" class="btn btn-primary">儲存植物資料</button>
+          <button type="submit" class="btn btn-primary">儲存資料至 Supabase 雲端</button>
         </div>
       </form>
     </div>
@@ -223,7 +223,7 @@
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-secondary" onclick="closeLogModal()">取消</button>
-          <button type="submit" class="btn btn-primary">儲存日誌紀錄</button>
+          <button type="submit" class="btn btn-primary">儲存日誌至 Supabase 雲端</button>
         </div>
       </form>
     </div>
@@ -235,7 +235,7 @@
       <div>
         <strong>Plant Hub 台灣賞花與植物養護系統</strong>
         <span style="margin: 0 0.5rem; color: var(--border-light);">|</span>
-        <span>無 Icon / 無 Emoji 植物園控管面板</span>
+        <span>Supabase 雲端資料庫已同步</span>
       </div>
       <div>
         <span class="footer-tag">Git Remote: https://github.com/tstar775880-sys/plant.git</span>
@@ -243,7 +243,11 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
+  <!-- Supabase CDN Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+
+  <!-- Application Scripts -->
   <script src="js/flower-data.js"></script>
   <script src="js/flower-planner.js"></script>
   <script src="js/garden-manager.js"></script>
@@ -257,18 +261,23 @@
   <script>
     let currentWaterTab = "all";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // Pre-fill today dates in forms
+    document.addEventListener("DOMContentLoaded", async () => {
       const today = new Date().toISOString().split('T')[0];
       document.getElementById("plant-input-date").value = today;
       document.getElementById("plant-input-lastwatered").value = today;
       document.getElementById("log-input-date").value = today;
 
-      // Event listeners for open modal buttons
       document.getElementById("btn-open-add-plant").addEventListener("click", openPlantModal);
       document.getElementById("btn-open-add-log").addEventListener("click", openLogModal);
 
       refreshPageData();
+
+      // Async fetch from Supabase Cloud DB
+      if (window.supabaseClient) {
+        await window.GardenManager.fetchPlantsAsync();
+        await window.JournalManager.fetchLogsAsync();
+        refreshPageData();
+      }
     });
 
     function refreshPageData() {
@@ -326,9 +335,9 @@
       `).join("");
     }
 
-    function handleWaterCheck(plantId, checkboxEl) {
+    async function handleWaterCheck(plantId, checkboxEl) {
       if (checkboxEl.checked) {
-        window.WateringTracker.markAsWatered(plantId);
+        await window.WateringTracker.markAsWatered(plantId);
         setTimeout(() => {
           refreshPageData();
         }, 200);
@@ -420,7 +429,6 @@
       `).join("");
     }
 
-    // Modal Control Functions
     function openPlantModal() {
       document.getElementById("modal-plant").classList.add("active");
     }
@@ -429,7 +437,6 @@
     }
 
     function openLogModal() {
-      // Populate plant select options
       const select = document.getElementById("log-input-plant");
       const plants = window.GardenManager.getPlants();
       select.innerHTML = plants.map(p => `<option value="${p.id}" data-name="${p.name}">${p.name} (${p.species})</option>`).join("");
@@ -439,7 +446,7 @@
       document.getElementById("modal-log").classList.remove("active");
     }
 
-    function handlePlantSubmit(e) {
+    async function handlePlantSubmit(e) {
       e.preventDefault();
       const name = document.getElementById("plant-input-name").value;
       const species = document.getElementById("plant-input-species").value;
@@ -449,7 +456,7 @@
       const location = document.getElementById("plant-input-location").value;
       const notes = document.getElementById("plant-input-notes").value;
 
-      window.GardenManager.addPlant({
+      await window.GardenManager.addPlant({
         name, species, purchaseDate, waterInterval, lastWatered, location, notes
       });
 
@@ -457,7 +464,7 @@
       refreshPageData();
     }
 
-    function handleLogSubmit(e) {
+    async function handleLogSubmit(e) {
       e.preventDefault();
       const select = document.getElementById("log-input-plant");
       const selectedOption = select.options[select.selectedIndex];
@@ -470,7 +477,7 @@
       const content = document.getElementById("log-input-content").value;
       const lesson = document.getElementById("log-input-lesson").value;
 
-      window.JournalManager.addLog({
+      await window.JournalManager.addLog({
         plantId, plantName, date, category, title, content, lesson
       });
 
@@ -478,16 +485,16 @@
       refreshPageData();
     }
 
-    function handleDeletePlant(plantId) {
-      if (confirm("確定要刪除此植物資料嗎？")) {
-        window.GardenManager.deletePlant(plantId);
+    async function handleDeletePlant(plantId) {
+      if (confirm("確定要刪除此植物資料嗎？（雲端資料庫將一併同步刪除）")) {
+        await window.GardenManager.deletePlant(plantId);
         refreshPageData();
       }
     }
 
-    function handleDeleteLog(logId) {
-      if (confirm("確定要刪除此筆養護日誌嗎？")) {
-        window.JournalManager.deleteLog(logId);
+    async function handleDeleteLog(logId) {
+      if (confirm("確定要刪除此筆養護日誌嗎？（雲端資料庫將一併同步刪除）")) {
+        await window.JournalManager.deleteLog(logId);
         refreshPageData();
       }
     }
