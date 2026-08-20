@@ -1,6 +1,7 @@
 /**
  * Plant Hub - Flower Planner Module (Supabase + Local Data)
  * Handles species variety filtering, blooming calendar matching, and custom trip itinerary builder.
+ * Seamlessly merges Supabase cloud database rows with local baseline data.
  */
 
 window.FlowerPlanner = (function() {
@@ -24,24 +25,53 @@ window.FlowerPlanner = (function() {
         const { data: catData } = await window.supabaseClient.from("flower_categories").select("*, varieties:flower_varieties(*)");
         const { data: spotData } = await window.supabaseClient.from("flower_spots").select("*");
 
+        const localCats = (window.PlantHubData && window.PlantHubData.flowerCategories) ? window.PlantHubData.flowerCategories : [];
+
         if (catData && catData.length > 0) {
-          cloudCategories = catData.map(c => ({
-            id: c.id,
-            name: c.name,
-            description: c.description,
-            mainSeason: c.main_season,
-            varieties: (c.varieties || []).map(v => ({
+          cloudCategories = catData.map(c => {
+            const localCat = localCats.find(lc => lc.id === c.id);
+            const dbVarieties = (c.varieties || []).map(v => ({
               id: v.id,
               name: v.name,
               bloomingMonths: v.blooming_months || [],
               peakMonth: v.peak_month,
+              endingMonth: v.ending_month || null,
               colorTag: v.color_tag,
               features: v.features,
               spots: []
-            }))
-          }));
+            }));
+
+            // Merge local varieties if missing in DB
+            let mergedVarieties = [...dbVarieties];
+            if (localCat && localCat.varieties) {
+              localCat.varieties.forEach(lv => {
+                if (!mergedVarieties.some(mv => mv.id === lv.id)) {
+                  mergedVarieties.push(lv);
+                }
+              });
+            }
+
+            // Prefer local name if local name has been expanded (e.g. 落羽松與黃金水杉)
+            const catName = (localCat && localCat.name && localCat.name.length > c.name.length) ? localCat.name : c.name;
+
+            return {
+              id: c.id,
+              name: catName,
+              description: c.description || (localCat ? localCat.description : ""),
+              mainSeason: c.main_season || (localCat ? localCat.mainSeason : ""),
+              varieties: mergedVarieties
+            };
+          });
+
+          // Also add any local categories that don't exist in cloud DB at all
+          localCats.forEach(lc => {
+            if (!cloudCategories.some(cc => cc.id === lc.id)) {
+              cloudCategories.push(lc);
+            }
+          });
+
         } else {
-          cloudCategories = [];
+          cloudCategories = localCats;
         }
 
         if (spotData && spotData.length > 0) {
@@ -58,11 +88,19 @@ window.FlowerPlanner = (function() {
             suggestedDuration: s.suggested_duration,
             tips: s.tips
           }));
+
+          // Merge local spots if missing
+          const localSpots = (window.PlantHubData && window.PlantHubData.flowerSpots) ? window.PlantHubData.flowerSpots : [];
+          localSpots.forEach(ls => {
+            if (!cloudSpots.some(cs => cs.id === ls.id)) {
+              cloudSpots.push(ls);
+            }
+          });
         } else {
-          cloudSpots = [];
+          cloudSpots = (window.PlantHubData && window.PlantHubData.flowerSpots) ? window.PlantHubData.flowerSpots : [];
         }
       } catch (e) {
-        console.warn("[FlowerPlanner] Supabase fetch error", e);
+        console.warn("[FlowerPlanner] Supabase fetch error, fallback to local data", e);
       }
     }
   }
@@ -182,4 +220,3 @@ window.FlowerPlanner = (function() {
     getCategoryTimelineData
   };
 })();
-
