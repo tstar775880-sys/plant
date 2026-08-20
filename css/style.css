@@ -822,10 +822,17 @@ textarea.form-control {
 }
 
 .gantt-cell.active-peak {
-  background-color: rgba(236, 72, 153, 0.3);
+  background-color: rgba(236, 72, 153, 0.35);
   border: 1px solid rgba(244, 114, 182, 0.6);
   color: var(--accent-pink-bright);
   font-weight: 700;
+}
+
+.gantt-cell.active-ending {
+  background-color: rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  color: var(--accent-amber);
+  font-weight: 600;
 }
 
 .gantt-cell.current-month-highlight {

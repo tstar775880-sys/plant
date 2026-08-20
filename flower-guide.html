@@ -29,9 +29,9 @@
     <!-- Page Header -->
     <header class="page-header">
       <span class="page-category-tag">[ 台灣賞花指南 & 全景時間軸 ]</span>
-      <h1 class="page-title">12 個月年度花期橫條圖與當月賞花速查</h1>
+      <h1 class="page-title">12 個月年度花期橫條圖與花況速查</h1>
       <p class="page-subtitle">
-        直觀瀏覽全台熱門花種大類別（如櫻花、梅花、油桐花、繡球花、金針花）在 1~12 月的花期分佈。點擊大類別即可展開觀看底下細分品種花期；亦可切換特定月份查詢當月正值盛開的賞花名勝景點！
+        直觀瀏覽全台熱門花種大類別（櫻花、梅花、油桐花、海芋、落羽松/落羽杉、繡球花）在 1~12 月的花期分佈。點擊大類別即可展開觀看底下細分品種；花況統一分為 [開花]、[盛開] 與 [尾聲] 三階段！
       </p>
     </header>
 
@@ -44,12 +44,15 @@
             12 個月大類別花期橫條時間軸 (點擊大類展開品種)
           </h2>
         </div>
-        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 0.75rem; align-items: center;">
+        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
           <span style="display: flex; align-items: center; gap: 0.3rem;">
-            <span style="width: 12px; height: 12px; background: rgba(34, 197, 94, 0.3); border: 1px solid var(--accent-green-bright); border-radius: 2px;"></span> 花期中
+            <span style="width: 12px; height: 12px; background: rgba(34, 197, 94, 0.3); border: 1px solid var(--accent-green-bright); border-radius: 2px;"></span> [開花]
           </span>
           <span style="display: flex; align-items: center; gap: 0.3rem;">
-            <span style="width: 12px; height: 12px; background: rgba(236, 72, 153, 0.4); border: 1px solid var(--accent-pink-bright); border-radius: 2px;"></span> 極盛期
+            <span style="width: 12px; height: 12px; background: rgba(236, 72, 153, 0.4); border: 1px solid var(--accent-pink-bright); border-radius: 2px;"></span> [盛開]
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.3rem;">
+            <span style="width: 12px; height: 12px; background: rgba(245, 158, 11, 0.3); border: 1px solid var(--accent-amber); border-radius: 2px;"></span> [尾聲]
           </span>
           <span style="display: flex; align-items: center; gap: 0.3rem;">
             <span style="width: 12px; height: 12px; background: var(--accent-green-dark); border: 1px solid var(--accent-green-bright); border-radius: 2px;"></span> 當前月份
@@ -73,49 +76,39 @@
       </div>
     </section>
 
-    <!-- Section 2: Current Month Focus & Spot Library -->
+    <!-- Section 2: Current Month Focus & Varieties List -->
     <section>
       <!-- Filter Bar -->
       <div class="filter-bar">
         <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-          <label class="form-label" style="margin-bottom: 0;">[ 觀賞 / 出遊月份 ]</label>
-          <select id="filter-month" class="form-select" style="min-width: 150px;">
+          <label class="form-label" style="margin-bottom: 0;">[ 觀賞 / 查詢月份 ]</label>
+          <select id="filter-month" class="form-select" style="min-width: 160px;">
             <option value="all">全年 12 個月</option>
-            <option value="1">1 月 (寒梅/山櫻花)</option>
-            <option value="2">2 月 (八重櫻/富士櫻)</option>
-            <option value="3">3 月 (吉野櫻極盛)</option>
-            <option value="4">4 月 (吉野櫻/油桐花)</option>
-            <option value="5">5 月 (油桐花/繡球花)</option>
-            <option value="6">6 月 (繡球花極盛)</option>
-            <option value="7">7 月 (高山景觀花卉)</option>
-            <option value="8">8 月 (金針花季)</option>
-            <option value="9">9 月 (金針花極盛)</option>
-            <option value="10">10 月 (秋季景觀)</option>
-            <option value="11">11 月 (楓葉/銀杏專區)</option>
-            <option value="12">12 月 (角板山白梅)</option>
+            <option value="1">1 月 (寒梅/山櫻/落羽松尾聲)</option>
+            <option value="2">2 月 (八重櫻/富士櫻/綠萼梅)</option>
+            <option value="3">3 月 (吉野櫻/白色海芋初綻)</option>
+            <option value="4">4 月 (油桐花/吉野櫻尾聲/白色海芋盛開)</option>
+            <option value="5">5 月 (油桐花尾聲/彩色海芋盛開/繡球花開花)</option>
+            <option value="6">6 月 (大葉與圓錐繡球花盛開/彩色海芋尾聲)</option>
+            <option value="7">7 月 (繡球花尾聲/高山夏日品種)</option>
+            <option value="8">8 月 (盛夏綠意品種)</option>
+            <option value="9">9 月 (初秋準備期)</option>
+            <option value="10">10 月 (秋季景觀花卉)</option>
+            <option value="11">11 月 (落羽松/落羽杉變色開花)</option>
+            <option value="12">12 月 (落羽松全紅盛開/角板山白梅初綻)</option>
           </select>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 0.3rem;">
           <label class="form-label" style="margin-bottom: 0;">[ 花種大分類 ]</label>
-          <select id="filter-category" class="form-select" style="min-width: 150px;">
-            <option value="all">全部分類</option>
-            <option value="cherry_blossom">櫻花 (細分山櫻/吉野櫻...)</option>
-            <option value="plum_blossom">梅花 (細分白梅/綠萼梅)</option>
-            <option value="tung_flower">油桐花</option>
-            <option value="hydrangea">繡球花</option>
-            <option value="daylily">金針花</option>
-          </select>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-          <label class="form-label" style="margin-bottom: 0;">[ 全台地區 ]</label>
-          <select id="filter-region" class="form-select" style="min-width: 140px;">
-            <option value="all">全台灣地區</option>
-            <option value="north">北部 (基北北桃竹)</option>
-            <option value="central">中部 (苗台中彰投)</option>
-            <option value="south">南部 (雲嘉南高屏)</option>
-            <option value="east">東部 (宜花東)</option>
+          <select id="filter-category" class="form-select" style="min-width: 180px;">
+            <option value="all">全部分類 (6大花種)</option>
+            <option value="cherry_blossom">櫻花 (山櫻/吉野/八重...)</option>
+            <option value="plum_blossom">梅花 (白梅/綠萼梅)</option>
+            <option value="tung_flower">油桐花 (五月雪)</option>
+            <option value="calla_lily">海芋 (竹子湖白海芋/彩色海芋)</option>
+            <option value="bald_cypress">落羽松 (落羽杉變色期)</option>
+            <option value="hydrangea">繡球花 (大葉/圓錐繡球)</option>
           </select>
         </div>
 
@@ -124,37 +117,18 @@
         </div>
       </div>
 
-      <!-- Content Area Grid -->
-      <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
-        
-        <!-- Left Column: Active Varieties Cards -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
-              [ 正值花期品種清單 ]
-            </h2>
-            <span id="varieties-count" class="badge badge-blue">0 個品種</span>
-          </div>
-
-          <div id="varieties-container" style="display: flex; flex-direction: column; gap: 1rem;">
-            <!-- Rendered by JS -->
-          </div>
+      <!-- Active Varieties Container -->
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
+            [ 正值花期品種清單 ]
+          </h2>
+          <span id="varieties-count" class="badge badge-blue">0 個品種</span>
         </div>
 
-        <!-- Right Column: Famous Spots Library -->
-        <div>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
-              [ 全台推薦賞花景點 ]
-            </h2>
-            <span id="spots-count" class="badge badge-green">0 個景點</span>
-          </div>
-
-          <div id="spots-container" style="display: flex; flex-direction: column; gap: 1rem;">
-            <!-- Rendered by JS -->
-          </div>
+        <div id="varieties-container" class="grid-2">
+          <!-- Rendered by JS -->
         </div>
-
       </div>
     </section>
 
@@ -197,7 +171,6 @@
       const currentMonth = new Date().getMonth() + 1;
       const elMonth = document.getElementById("filter-month");
       const elCategory = document.getElementById("filter-category");
-      const elRegion = document.getElementById("filter-region");
       const elBtnReset = document.getElementById("btn-reset-filters");
 
       // Default filter month to current real month (e.g. August)
@@ -208,27 +181,21 @@
       function updatePageUI() {
         const cat = elCategory.value;
         const month = elMonth.value;
-        const region = elRegion.value;
 
         // 1. Render 12-Month Gantt Timeline
         renderGanttTimeline(currentMonth);
 
-        // 2. Render Varieties & Spots list for filtered month/category
+        // 2. Render Varieties list for filtered month/category
         const varieties = window.FlowerPlanner.filterVarieties(cat, month);
         renderVarietiesList(varieties);
-
-        const spots = window.FlowerPlanner.filterSpots(region, cat);
-        renderSpotsList(spots);
       }
 
       elCategory.addEventListener("change", updatePageUI);
       elMonth.addEventListener("change", updatePageUI);
-      elRegion.addEventListener("change", updatePageUI);
 
       elBtnReset.addEventListener("click", () => {
         elCategory.value = "all";
         elMonth.value = currentMonth.toString();
-        elRegion.value = "all";
         updatePageUI();
       });
 
@@ -241,7 +208,8 @@
     });
 
     /**
-     * Renders the 12-Month Annual Gantt Blooming Timeline Table
+     * Renders the 12-Month Annual Gantt Blooming Timeline Table with Unified 3-Stage Blooming Statuses:
+     * [開花] (green), [盛開] (pink), [尾聲] (amber)
      */
     function renderGanttTimeline(currentMonthNum) {
       const headerContainer = document.getElementById("gantt-header-row");
@@ -278,15 +246,24 @@
           const isPeak = cat.peakMonths.includes(m);
           const isCurrent = m === currentMonthNum;
 
+          // Check if month is ending for all varieties
+          let isEnding = false;
+          if (inSeason && !isPeak && cat.varieties && cat.varieties.length > 0) {
+            isEnding = cat.varieties.some(v => v.endingMonth === m || (v.bloomingMonths.length > 1 && m === v.bloomingMonths[v.bloomingMonths.length - 1] && m !== v.peakMonth));
+          }
+
           let cellClass = "gantt-cell";
           let labelText = "";
 
           if (isPeak) {
             cellClass += " active-peak";
             labelText = "盛開";
+          } else if (isEnding) {
+            cellClass += " active-ending";
+            labelText = "尾聲";
           } else if (inSeason) {
             cellClass += " active-season";
-            labelText = "花期";
+            labelText = "開花";
           }
 
           if (isCurrent) {
@@ -304,6 +281,7 @@
             for (let m = 1; m <= 12; m++) {
               const inVSeason = v.bloomingMonths.includes(m);
               const isVPeak = v.peakMonth === m;
+              const isVEnding = (v.endingMonth && m === v.endingMonth) || (v.bloomingMonths.length > 1 && m === v.bloomingMonths[v.bloomingMonths.length - 1] && m !== v.peakMonth);
               const isCurrent = m === currentMonthNum;
 
               let vCellClass = "gantt-cell";
@@ -311,7 +289,10 @@
 
               if (isVPeak) {
                 vCellClass += " active-peak";
-                vLabelText = "極盛";
+                vLabelText = "盛開";
+              } else if (isVEnding) {
+                vCellClass += " active-ending";
+                vLabelText = "尾聲";
               } else if (inVSeason) {
                 vCellClass += " active-season";
                 vLabelText = "開花";
@@ -377,7 +358,7 @@
       countBadge.textContent = `${varieties.length} 個品種`;
 
       if (varieties.length === 0) {
-        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">所選條件下暫無盛開花種數據</div>`;
+        container.innerHTML = `<div style="grid-column: span 2; padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">所選條件下暫無花況數據</div>`;
         return;
       }
 
@@ -391,46 +372,11 @@
             <span class="badge badge-gray">${v.categoryName}</span>
           </div>
           <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 600; margin-bottom: 0.4rem;">
-            花期時段：${v.mainSeason} (極盛：${v.peakMonth}月) | 花色：${v.colorTag}
+            花期時段：${v.mainSeason} (極盛：${v.peakMonth}月) | 色彩：${v.colorTag}
           </div>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
             ${v.features}
           </p>
-        </div>
-      `).join("");
-    }
-
-    function renderSpotsList(spots) {
-      const container = document.getElementById("spots-container");
-      const countBadge = document.getElementById("spots-count");
-
-      countBadge.textContent = `${spots.length} 個景點`;
-
-      if (spots.length === 0) {
-        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">所選條件下暫無賞花景點數據</div>`;
-        return;
-      }
-
-      container.innerHTML = spots.map(s => `
-        <div class="card" style="padding: 1.25rem; background-color: var(--bg-surface);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem;">
-            <div>
-              <span class="badge badge-blue" style="margin-bottom: 0.3rem;">${s.regionName}</span>
-              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">${s.name}</h3>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="window.ICSExporter.openGoogleMaps('${s.location || s.name}')">
-              [開啟地圖導航]
-            </button>
-          </div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
-            位置：${s.location} | 建議停留：${s.suggestedDuration} | 最佳月份：${s.bestMonths.join("月、")}月
-          </div>
-          <p style="font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem;">
-            ${s.description}
-          </p>
-          <div style="font-size: 0.8rem; color: var(--accent-amber); background: rgba(245,158,11,0.1); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.2);">
-            賞花建議：${s.tips}
-          </div>
         </div>
       `).join("");
     }

@@ -79,7 +79,30 @@ window.FlowerPlanner = (function() {
         const isMatch = targetM === null || (v.bloomingMonths && v.bloomingMonths.includes(targetM));
 
         if (isMatch) {
-          const isPeak = targetM ? v.peakMonth === targetM : false;
+          let statusText = "[開花]";
+          let badgeClass = "badge-green";
+          let statusKey = "BLOOMING";
+
+          if (targetM) {
+            const isEnding = (v.endingMonth && v.endingMonth === targetM) || 
+                             (v.bloomingMonths && v.bloomingMonths.length > 1 && targetM === v.bloomingMonths[v.bloomingMonths.length - 1] && targetM !== v.peakMonth);
+            const isPeak = v.peakMonth === targetM;
+
+            if (isPeak) {
+              statusText = "[盛開]";
+              badgeClass = "badge-pink";
+              statusKey = "PEAK";
+            } else if (isEnding) {
+              statusText = "[尾聲]";
+              badgeClass = "badge-amber";
+              statusKey = "ENDING";
+            } else {
+              statusText = "[開花]";
+              badgeClass = "badge-green";
+              statusKey = "BLOOMING";
+            }
+          }
+
           results.push({
             categoryId: cat.id,
             categoryName: cat.name,
@@ -88,12 +111,12 @@ window.FlowerPlanner = (function() {
             bloomingMonths: v.bloomingMonths || [],
             mainSeason: v.bloomingMonths && v.bloomingMonths.length ? `${v.bloomingMonths[0]}月 - ${v.bloomingMonths[v.bloomingMonths.length - 1]}月` : "花期未知",
             peakMonth: v.peakMonth,
-            isPeak,
-            statusText: isPeak ? "[盛開中]" : (targetM ? "[花期中]" : `[花期中]`),
-            badgeClass: isPeak ? "badge-pink" : "badge-green",
+            endingMonth: v.endingMonth,
+            statusKey,
+            statusText,
+            badgeClass,
             colorTag: v.colorTag || "資訊補集中",
-            features: v.features || "",
-            spots: v.spots || []
+            features: v.features || ""
           });
         }
       });
@@ -142,6 +165,7 @@ window.FlowerPlanner = (function() {
           name: v.name,
           bloomingMonths: v.bloomingMonths || [],
           peakMonth: v.peakMonth,
+          endingMonth: v.endingMonth || (v.bloomingMonths && v.bloomingMonths.length > 1 ? v.bloomingMonths[v.bloomingMonths.length - 1] : null),
           colorTag: v.colorTag || "",
           features: v.features || ""
         }))
