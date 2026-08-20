@@ -1,7 +1,8 @@
 /**
  * Plant Hub - Taiwan Flower Data Repository
- * Authoritative baseline data preloaded for 6 major Taiwan flower categories:
- * 櫻花, 梅花, 油桐花, 海芋, 落羽松 (落羽杉), 繡球花.
+ * Authoritative baseline data preloaded for 19 major Taiwan flower categories:
+ * 櫻花, 梅花, 油桐花, 海芋, 落羽松(落羽杉), 繡球花, 荷花與睡蓮, 金針花, 薰衣草,
+ * 鼠尾草, 黃花風鈴木, 韭菜花, 芒花(甜根子草), 鬱金香, 楓葉, 銀杏, 杭菊, 玫瑰, 向日葵.
  */
 
 window.PlantHubData = window.PlantHubData || {};
@@ -111,7 +112,7 @@ window.PlantHubData.flowerCategories = [
     varieties: [
       {
         id: "white_calla",
-        name: "白色海芋 (濕地型)",
+        name: "白色海芋 (竹子湖濕地型)",
         bloomingMonths: [3, 4, 5],
         peakMonth: 4,
         endingMonth: 5,
@@ -120,7 +121,7 @@ window.PlantHubData.flowerCategories = [
       },
       {
         id: "color_calla",
-        name: "彩色海芋 (陸生型)",
+        name: "彩色海芋 (桃園陸生型)",
         bloomingMonths: [4, 5, 6],
         peakMonth: 5,
         endingMonth: 6,
@@ -142,7 +143,7 @@ window.PlantHubData.flowerCategories = [
         peakMonth: 12,
         endingMonth: 1,
         colorTag: "黃綠/金黃/深紅褐色",
-        features: "11月開始轉黃開花，12月全紅盛開極盛，1月逐漸落葉進入尾聲。"
+        features: "11月開始轉黃開花觀賞，12月全紅盛開極盛，1月逐漸落葉進入尾聲。"
       }
     ]
   },
@@ -169,6 +170,254 @@ window.PlantHubData.flowerCategories = [
         endingMonth: 7,
         colorTag: "奶油白/淡粉紅",
         features: "花序呈圓錐狀，花期略晚於大葉繡球，耐熱性較佳，夏初清爽美景。"
+      }
+    ]
+  },
+  {
+    id: "lotus_waterlily",
+    name: "荷花與睡蓮",
+    description: "夏季水生花卉盛宴！白河蓮花季立葉荷花與各地香水睡蓮高雅綻放。",
+    mainSeason: "4月 - 9月",
+    varieties: [
+      {
+        id: "baihe_lotus",
+        name: "白河荷花 (立葉大賀蓮)",
+        bloomingMonths: [5, 6, 7, 8],
+        peakMonth: 6,
+        endingMonth: 8,
+        colorTag: "粉紅/純白色",
+        features: "台南白河經典荷花，花朵高挺出水，6月盛開滿池，8月結實結蓮蓬進入尾聲。"
+      },
+      {
+        id: "perfume_waterlily",
+        name: "香水睡蓮 (浮葉睡蓮)",
+        bloomingMonths: [4, 5, 6, 7, 8, 9],
+        peakMonth: 6,
+        endingMonth: 9,
+        colorTag: "亮紫/鮮黃/純白/粉紅",
+        features: "葉片浮於水面，花期極長且自帶清幽香氣，4月至9月水池畔優雅盛開。"
+      }
+    ]
+  },
+  {
+    id: "daylily",
+    name: "金針花 (萱草)",
+    description: "母親花萱草！從五月平地金針到八九月花東高山花海，金黃浪潮極為壯觀。",
+    mainSeason: "5月 - 9月",
+    varieties: [
+      {
+        id: "alpine_daylily",
+        name: "六十石山/赤科山高山金針",
+        bloomingMonths: [8, 9],
+        peakMonth: 8,
+        endingMonth: 9,
+        colorTag: "燦爛橙黃色",
+        features: "8月盛開滿山金黃地毯，9月進入採收與季末尾聲，花東海岸山脈絕景。"
+      },
+      {
+        id: "plain_daylily",
+        name: "平地金針花 (花蓮1號/彰化花壇)",
+        bloomingMonths: [5, 6],
+        peakMonth: 5,
+        endingMonth: 6,
+        colorTag: "亮金黃色",
+        features: "5月母親節前後平地爆發，花期較高山早，黃澄澄山坡美不勝收。"
+      }
+    ]
+  },
+  {
+    id: "lavender",
+    name: "薰衣草",
+    description: "秋冬至早春山林浪漫紫浪，帶有令人舒緩沉靜的獨特芳香。",
+    mainSeason: "11月 - 4月",
+    varieties: [
+      {
+        id: "sweet_lavender",
+        name: "甜蜜薰衣草 / 羽葉薰衣草",
+        bloomingMonths: [11, 12, 1, 2, 3, 4],
+        peakMonth: 1,
+        endingMonth: 4,
+        colorTag: "浪漫紫色",
+        features: "台灣冬季至早春最具代表性的紫色花海，1月極盛盛開，4月春末進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "salvia",
+    name: "鼠尾草",
+    description: "秋冬春季紫藍色長穗花海，常與薰衣草交織成絕美花毯景緻。",
+    mainSeason: "10月 - 4月",
+    varieties: [
+      {
+        id: "mexican_salvia",
+        name: "墨西哥鼠尾草 / 藍花鼠尾草",
+        bloomingMonths: [10, 11, 12, 1, 2, 3, 4],
+        peakMonth: 11,
+        endingMonth: 4,
+        colorTag: "天鵝絨深紫/藍紫色",
+        features: "花穗絨毛質感顯眼，11月盛開極盛，持續綻放到4月春末。"
+      }
+    ]
+  },
+  {
+    id: "golden_trumpet",
+    name: "黃花風鈴木",
+    description: "春季中南部爆發的金黃街道奇蹟，黃澄澄喇叭狀花朵短暫震撼綻放。",
+    mainSeason: "2月 - 3月",
+    varieties: [
+      {
+        id: "golden_trumpet_tree",
+        name: "黃花風鈴木 (黃金風鈴木)",
+        bloomingMonths: [2, 3],
+        peakMonth: 3,
+        endingMonth: 3,
+        colorTag: "耀眼鮮黃色",
+        features: "2月下旬初綻開花，3月金黃花朵如風鈴掛滿枝頭盛開極盛，花期短暫而絢麗。"
+      }
+    ]
+  },
+  {
+    id: "chive_flower",
+    name: "韭菜花",
+    description: "桃園大溪九月雪！秋初田園間細碎潔白花朵覆蓋大地，宛如積雪。",
+    mainSeason: "8月 - 9月",
+    varieties: [
+      {
+        id: "daxi_chive_flower",
+        name: "大溪九月雪韭菜花",
+        bloomingMonths: [8, 9],
+        peakMonth: 9,
+        endingMonth: 9,
+        colorTag: "雪白色",
+        features: "8月下旬開始開花，9月盛開時萬花齊放如雪花覆蓋綠田，絕美夏末秋初景色。"
+      }
+    ]
+  },
+  {
+    id: "silvergrass",
+    name: "芒花 (甜根子草)",
+    description: "秋季山海之間隨風擺盪的銀色波浪，從溪床甜根子到秋芒步道絕景。",
+    mainSeason: "9月 - 11月",
+    varieties: [
+      {
+        id: "sweet_root_grass",
+        name: "甜根子草 (溪床銀浪)",
+        bloomingMonths: [9, 10],
+        peakMonth: 9,
+        endingMonth: 10,
+        colorTag: "羽毛純白色",
+        features: "9月中秋前後中南部河床滿滿純白羽毛花海盛開，10月進入季末尾聲。"
+      },
+      {
+        id: "silver_grass_var",
+        name: "菅芒花 (山坡金黃銀浪)",
+        bloomingMonths: [10, 11],
+        peakMonth: 11,
+        endingMonth: 11,
+        colorTag: "淡黃/紅褐色",
+        features: "10月開花，11月草嶺古道與陽明山滿山紅褐色銀浪隨風搖曳盛開極盛。"
+      }
+    ]
+  },
+  {
+    id: "tulip",
+    name: "鬱金香",
+    description: "冬末早春的歐洲風情！杯狀繽紛花朵在花園與花展高雅綻放。",
+    mainSeason: "1月 - 3月",
+    varieties: [
+      {
+        id: "dutch_tulip",
+        name: "荷蘭鬱金香 (多彩系)",
+        bloomingMonths: [1, 2, 3],
+        peakMonth: 2,
+        endingMonth: 3,
+        colorTag: "艷紅/粉/純黃/紫黑多彩",
+        features: "1月開花，2月士林官邸與山區園區極盛盛開，3月進入春季尾聲。"
+      }
+    ]
+  },
+  {
+    id: "maple",
+    name: "楓葉 (楓樹/槭樹)",
+    description: "深秋至初冬的紅葉盛宴！滿山層林盡染，金黃與楓紅交織奇景。",
+    mainSeason: "11月 - 12月",
+    varieties: [
+      {
+        id: "red_maple",
+        name: "青楓 / 掌葉楓 (楓紅期)",
+        bloomingMonths: [11, 12],
+        peakMonth: 12,
+        endingMonth: 12,
+        colorTag: "鮮紅/金黃/橘紅色",
+        features: "11月受冷空氣影響開始變紅，12月奧萬大與福壽山全紅盛開極盛。"
+      }
+    ]
+  },
+  {
+    id: "ginkgo",
+    name: "銀杏",
+    description: "活化石植物的黃金傳奇！秋季溪頭大崙山茶園間全台最大銀杏森林。",
+    mainSeason: "10月 - 11月",
+    varieties: [
+      {
+        id: "ginkgo_tree",
+        name: "銀杏 (黃金葉觀賞期)",
+        bloomingMonths: [10, 11],
+        peakMonth: 10,
+        endingMonth: 11,
+        colorTag: "燦爛金黃色",
+        features: "10月溪頭與大崙山黃金扇形葉盛開極盛，11月金黃落葉飄灑步道尾聲。"
+      }
+    ]
+  },
+  {
+    id: "chrysanthemum",
+    name: "杭菊 (菊海)",
+    description: "秋末苗栗銅鑼大地的黃白雪毯！圓滾滾黃菊與白菊浪漫盛開。",
+    mainSeason: "11月 - 12月",
+    varieties: [
+      {
+        id: "hangzhou_chrysanthemum",
+        name: "銅鑼白菊與黃菊",
+        bloomingMonths: [11, 12],
+        peakMonth: 11,
+        endingMonth: 12,
+        colorTag: "雪白/金黃圓球狀",
+        features: "11月苗栗銅鑼杭菊季盛開，如雪球降落田野，12月初採收進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "rose",
+    name: "玫瑰",
+    description: "千姿百態的香氣王后！花型豐滿多彩，在台灣秋冬春季節連續開花綻放。",
+    mainSeason: "11月 - 4月",
+    varieties: [
+      {
+        id: "grand_rose",
+        name: "四季大花玫瑰 / 蔓藤玫瑰",
+        bloomingMonths: [11, 12, 1, 2, 3, 4],
+        peakMonth: 3,
+        endingMonth: 4,
+        colorTag: "深紅/粉紅/亮黃/純白/紫色",
+        features: "台北玫瑰園與各地玫瑰森林盛景，3月春季花量最大盛開極盛。"
+      }
+    ]
+  },
+  {
+    id: "sunflower",
+    name: "向日葵",
+    description: "陽光下最耀眼的金色巨浪！夏秋之際追隨太陽綻放的活力花海。",
+    mainSeason: "5月 - 10月",
+    varieties: [
+      {
+        id: "giant_sunflower",
+        name: "巨型向日葵 / 彩色向日葵",
+        bloomingMonths: [5, 6, 7, 8, 9, 10],
+        peakMonth: 7,
+        endingMonth: 10,
+        colorTag: "耀眼金黃色/深橘紅",
+        features: "5月起陸續綻放，7月盛夏極盛，持續作為休耕田花海盛開至10月。"
       }
     ]
   }
