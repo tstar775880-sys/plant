@@ -1,7 +1,7 @@
 /**
  * Plant Hub - Taiwan Flower Data Repository
  * Authoritative baseline data preloaded for 25 major Taiwan flower categories:
- * 櫻花, 梅花, 油桐花, 海芋, 落羽松(落羽杉), 繡球花, 荷花與睡蓮, 金針花, 薰衣草,
+ * 櫻花, 梅花, 油桐花, 海芋, 落羽松與水杉, 繡球花, 荷花與睡蓮, 金針花, 薰衣草,
  * 鼠尾草, 黃花風鈴木, 韭菜花, 芒花(甜根子草), 鬱金香, 楓葉, 銀杏, 杭菊, 玫瑰, 向日葵,
  * 木棉花, 紫藤花, 阿勃勒, 蜀葵花, 波斯菊, 九重葛.
  */
@@ -133,18 +133,27 @@ window.PlantHubData.flowerCategories = [
   },
   {
     id: "bald_cypress",
-    name: "落羽松 (落羽杉)",
-    description: "秋冬之際由翠綠轉為金黃、深紅的羽狀複葉美景，宛如置身歐美夢幻森林。",
+    name: "落羽松與黃金水杉",
+    description: "秋冬羽狀複葉變色美景！包含各地落羽松 (落羽杉) 與南投杉林溪活化石黃金水杉林。",
     mainSeason: "11月 - 1月",
     varieties: [
       {
         id: "bald_cypress_var",
-        name: "落羽杉 (變色觀賞期)",
+        name: "落羽松 (落羽杉 / 葉互生 / 具膝根)",
         bloomingMonths: [11, 12, 1],
         peakMonth: 12,
         endingMonth: 1,
         colorTag: "黃綠/金黃/深紅褐色",
-        features: "11月開始轉黃開花觀賞，12月全紅盛開極盛，1月逐漸落葉進入尾聲。"
+        features: "11月開始轉黃觀賞，12月全紅盛開極盛，1月逐漸落葉進入尾聲。小葉左右交錯互生。"
+      },
+      {
+        id: "metasequoia_var",
+        name: "黃金水杉 (活化石 / 葉對生 / 杉林溪)",
+        bloomingMonths: [11, 12],
+        peakMonth: 11,
+        endingMonth: 12,
+        colorTag: "璀璨金黃色/橘黃色",
+        features: "11月南投杉林溪黃金水杉林爆發燦爛金黃極盛，12月進入季末尾聲。小葉兩兩相對對生。"
       }
     ]
   },
