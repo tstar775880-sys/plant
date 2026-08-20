@@ -1,8 +1,9 @@
 /**
  * Plant Hub - Taiwan Flower Data Repository
- * Authoritative baseline data preloaded for 19 major Taiwan flower categories:
+ * Authoritative baseline data preloaded for 25 major Taiwan flower categories:
  * 櫻花, 梅花, 油桐花, 海芋, 落羽松(落羽杉), 繡球花, 荷花與睡蓮, 金針花, 薰衣草,
- * 鼠尾草, 黃花風鈴木, 韭菜花, 芒花(甜根子草), 鬱金香, 楓葉, 銀杏, 杭菊, 玫瑰, 向日葵.
+ * 鼠尾草, 黃花風鈴木, 韭菜花, 芒花(甜根子草), 鬱金香, 楓葉, 銀杏, 杭菊, 玫瑰, 向日葵,
+ * 木棉花, 紫藤花, 阿勃勒, 蜀葵花, 波斯菊, 九重葛.
  */
 
 window.PlantHubData = window.PlantHubData || {};
@@ -418,6 +419,108 @@ window.PlantHubData.flowerCategories = [
         endingMonth: 10,
         colorTag: "耀眼金黃色/深橘紅",
         features: "5月起陸續綻放，7月盛夏極盛，持續作為休耕田花海盛開至10月。"
+      }
+    ]
+  },
+  {
+    id: "kapok",
+    name: "木棉花",
+    description: "台南白河林初埤獲選全球最美花道！春季熱烈綻放橘紅色木棉花雨。",
+    mainSeason: "3月 - 4月",
+    varieties: [
+      {
+        id: "kapok_tree",
+        name: "林初埤橘紅木棉",
+        bloomingMonths: [3, 4],
+        peakMonth: 3,
+        endingMonth: 4,
+        colorTag: "耀眼橘紅色",
+        features: "3月木棉花道爆發盛開極盛，4月花落滿地進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "wisteria",
+    name: "紫藤花",
+    description: "春季短暫集中綻放的夢幻紫色花瀑，嘉義瑞里與淡水園區浪漫盛景。",
+    mainSeason: "3月 - 4月",
+    varieties: [
+      {
+        id: "japanese_wisteria",
+        name: "日本紫藤 / 瑞里紫藤",
+        bloomingMonths: [3, 4],
+        peakMonth: 4,
+        endingMonth: 4,
+        colorTag: "夢幻紫色/淡紫色",
+        features: "3月下旬開花，4月上旬垂墜花瀑盛開極盛，4月中旬迅速進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "golden_shower",
+    name: "阿勃勒 (黃金雨)",
+    description: "初夏金黃花穗懸掛樹梢隨風飄落，宛如灑落大地的金黃色雨滴。",
+    mainSeason: "5月 - 6月",
+    varieties: [
+      {
+        id: "golden_shower_tree",
+        name: "阿勃勒 (黃金雨期)",
+        bloomingMonths: [5, 6],
+        peakMonth: 5,
+        endingMonth: 6,
+        colorTag: "燦爛金黃色",
+        features: "5月台南與各地盛開極盛成黃金大道，6月花落進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "hollyhock",
+    name: "蜀葵花 (一丈紅)",
+    description: "株高達2-3公尺的花海迷宮！員林與學甲春季最具震撼力的巨型花卉。",
+    mainSeason: "3月 - 5月",
+    varieties: [
+      {
+        id: "yuanlin_hollyhock",
+        name: "員林/學甲蜀葵花",
+        bloomingMonths: [3, 4, 5],
+        peakMonth: 4,
+        endingMonth: 5,
+        colorTag: "濃紅/粉紅/純白/墨紫",
+        features: "3月開花，4月高聳花柱爆發盛開極盛，5月春末進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "cosmos",
+    name: "波斯菊 (花海)",
+    description: "台灣秋冬至早春休耕期間最廣闊繽紛的大花毯，色彩燦爛奪目。",
+    mainSeason: "10月 - 2月",
+    varieties: [
+      {
+        id: "giant_cosmos",
+        name: "大波斯菊 / 黃波斯菊",
+        bloomingMonths: [10, 11, 12, 1, 2],
+        peakMonth: 11,
+        endingMonth: 2,
+        colorTag: "粉紅/桃紅/純白/金黃",
+        features: "10月開花，11月新社花海極盛，持續盛開至2月春耕前進入尾聲。"
+      }
+    ]
+  },
+  {
+    id: "bougainvillea",
+    name: "九重葛",
+    description: "秋冬至早春爆發花瀑牆！彰化田尾與各地巷弄艷麗絕美景緻。",
+    mainSeason: "10月 - 3月",
+    varieties: [
+      {
+        id: "bougainvillea_var",
+        name: "艷紅/紫紅九重葛",
+        bloomingMonths: [10, 11, 12, 1, 2, 3],
+        peakMonth: 11,
+        endingMonth: 3,
+        colorTag: "桃紅/深紫/亮紅/白色",
+        features: "10月開花，11月盛開成瀑布花牆，持續綻放到3月春季進入尾聲。"
       }
     ]
   }
