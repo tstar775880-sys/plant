@@ -86,20 +86,20 @@
       <article class="card">
         <div class="card-header">
           <div>
-            <span class="badge badge-pink">[ 假期賞花規劃 ]</span>
-            <h2 class="card-title" style="margin-top: 0.4rem;">台灣賞花指南 & 行程規劃</h2>
+            <span class="badge badge-pink">[ 全景花期時間軸 ]</span>
+            <h2 class="card-title" style="margin-top: 0.4rem;">台灣賞花指南 & 12個月花期時間軸</h2>
           </div>
         </div>
         <div class="card-body">
           <p style="margin-bottom: 1rem;">
-            專為休假規劃設計！查詢台灣 1-12 月盛開花種與品種細分（例如櫻花細分山櫻花、八重櫻、吉野櫻、富士櫻；梅花細分角板山白梅與綠萼梅）。
+            一目了然！查詢台灣 1-12 月各大類花種花期時間軸（如櫻花 1-4月涵蓋山櫻/吉野櫻；梅花 12-2月涵蓋白梅/綠萼梅）。
           </p>
           <ul style="list-style: none; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
-            <li style="margin-bottom: 0.4rem;">• <strong>品種花期時間軸</strong>：依月份與開花狀態精準篩選。</li>
-            <li style="margin-bottom: 0.4rem;">• <strong>全台賞花景點庫</strong>：陽明山、武陵農場、阿里山、信義梅園等。</li>
-            <li style="margin-bottom: 0.4rem;">• <strong>出遊行程規劃器</strong>：輕鬆建立假期賞花路線。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>12 個月大類別橫條圖</strong>：視覺化全景呈現開花時段。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>點擊大類展開品種</strong>：下鑽展開細分品種獨立花期。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>當月熱門賞花與地圖導航</strong>：快速查詢當月盛開景點與一鍵 Google Maps 導航。</li>
           </ul>
-          <a href="flower-guide.html" class="btn btn-primary" style="width: 100%;">開啟賞花指南與行程規劃</a>
+          <a href="flower-guide.html" class="btn btn-primary" style="width: 100%;">開啟賞花指南與花期時間軸</a>
         </div>
       </article>
 
@@ -117,7 +117,7 @@
           </p>
           <ul style="list-style: none; margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
             <li style="margin-bottom: 0.4rem;">• <strong>植物庫與養護百科</strong>：栽培要領與光照土壤建議。</li>
-            <li style="margin-bottom: 0.4rem;">• <strong>澆水週期自動計算</strong>：防錯過給水或過度給水。</li>
+            <li style="margin-bottom: 0.4rem;">• <strong>澆水週期與日曆匯出 (.ics)</strong>：一鍵寫入日曆提醒。</li>
             <li style="margin-bottom: 0.4rem;">• <strong>養殖問題與失敗紀錄</strong>：紀錄水多爛根、施肥、病蟲害檢討。</li>
           </ul>
           <a href="my-garden.html" class="btn btn-primary" style="width: 100%;">開啟我的植物園與日誌</a>
@@ -147,6 +147,7 @@
   <script src="js/supabase-config.js"></script>
 
   <!-- Application Scripts -->
+  <script src="js/ics-exporter.js"></script>
   <script src="js/flower-data.js"></script>
   <script src="js/flower-planner.js"></script>
   <script src="js/garden-manager.js"></script>

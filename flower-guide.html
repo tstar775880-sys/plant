@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>台灣賞花指南 & 行程規劃 - Plant Hub</title>
+  <title>台灣賞花指南 & 12個月花期時間軸 - Plant Hub</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="nav-link">首頁 Focus</a></li>
-        <li><a href="flower-guide.html" class="nav-link active">賞花指南 & 行程規劃</a></li>
+        <li><a href="flower-guide.html" class="nav-link active">賞花指南 & 花期時間軸</a></li>
         <li><a href="my-garden.html" class="nav-link">我的植物園 & 澆水日誌</a></li>
       </ul>
     </div>
@@ -28,87 +28,124 @@
     
     <!-- Page Header -->
     <header class="page-header">
-      <span class="page-category-tag">[ 台灣賞花指南 & 出遊規劃 ]</span>
-      <h1 class="page-title">四季花期、品種細分與賞花景點資料庫</h1>
+      <span class="page-category-tag">[ 台灣賞花指南 & 全景時間軸 ]</span>
+      <h1 class="page-title">12 個月年度花期橫條圖與當月賞花速查</h1>
       <p class="page-subtitle">
-        提供台灣各地熱門花種花期資訊。針對櫻花細分山櫻花、八重櫻、吉野櫻與富士櫻；梅花細分白梅與綠萼梅。放假不知道去哪裡？一鍵查詢當月盛開景點並排定出遊行程！
+        直觀瀏覽全台熱門花種大類別（如櫻花、梅花、油桐花、繡球花、金針花）在 1~12 月的花期分佈。點擊大類別即可展開觀看底下細分品種花期；亦可切換特定月份查詢當月正值盛開的賞花名勝景點！
       </p>
     </header>
 
-    <!-- Filter Controls Bar -->
-    <section class="filter-bar">
-      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-        <label class="form-label" style="margin-bottom: 0;">[ 花種分類 ]</label>
-        <select id="filter-category" class="form-select" style="min-width: 150px;">
-          <option value="all">全部分類</option>
-          <option value="cherry_blossom">櫻花 (細分品種)</option>
-          <option value="plum_blossom">梅花 (細分品種)</option>
-          <option value="tung_flower">油桐花</option>
-          <option value="hydrangea">繡球花</option>
-          <option value="daylily">金針花</option>
-        </select>
+    <!-- Section 1: 12-Month Gantt Blooming Timeline Overview -->
+    <section style="margin-bottom: 2.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <span class="badge badge-pink" style="margin-bottom: 0.3rem;">[ 年度花期總覽 ]</span>
+          <h2 style="font-size: 1.35rem; font-weight: 700; color: var(--text-primary);">
+            12 個月大類別花期橫條時間軸 (點擊大類展開品種)
+          </h2>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 0.75rem; align-items: center;">
+          <span style="display: flex; align-items: center; gap: 0.3rem;">
+            <span style="width: 12px; height: 12px; background: rgba(34, 197, 94, 0.3); border: 1px solid var(--accent-green-bright); border-radius: 2px;"></span> 花期中
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.3rem;">
+            <span style="width: 12px; height: 12px; background: rgba(236, 72, 153, 0.4); border: 1px solid var(--accent-pink-bright); border-radius: 2px;"></span> 極盛期
+          </span>
+          <span style="display: flex; align-items: center; gap: 0.3rem;">
+            <span style="width: 12px; height: 12px; background: var(--accent-green-dark); border: 1px solid var(--accent-green-bright); border-radius: 2px;"></span> 當前月份
+          </span>
+        </div>
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-        <label class="form-label" style="margin-bottom: 0;">[ 出遊/賞花月份 ]</label>
-        <select id="filter-month" class="form-select" style="min-width: 130px;">
-          <option value="all">全年 12 個月</option>
-          <option value="1">1 月 (寒梅/山櫻)</option>
-          <option value="2">2 月 (八重櫻/富士櫻)</option>
-          <option value="3">3 月 (吉野櫻極盛)</option>
-          <option value="4">4 月 (吉野櫻/油桐花)</option>
-          <option value="5">5 月 (油桐花/繡球花)</option>
-          <option value="6">6 月 (繡球花盛開)</option>
-          <option value="7">7 月 (高山花卉)</option>
-          <option value="8">8 月 (金針花季)</option>
-          <option value="9">9 月 (金針花極盛)</option>
-          <option value="10">10 月 (秋季景觀)</option>
-          <option value="11">11 月 (楓葉季準備)</option>
-          <option value="12">12 月 (角板山白梅)</option>
-        </select>
-      </div>
+      <!-- Gantt Timeline Container -->
+      <div class="gantt-container">
+        <div class="gantt-table">
+          <!-- Timeline Header Row (1-12 Months) -->
+          <div class="gantt-header" id="gantt-header-row">
+            <!-- Populated by JS -->
+          </div>
 
-      <div style="display: flex; flex-direction: column; gap: 0.3rem;">
-        <label class="form-label" style="margin-bottom: 0;">[ 台灣地區 ]</label>
-        <select id="filter-region" class="form-select" style="min-width: 130px;">
-          <option value="all">全台灣地區</option>
-          <option value="north">北部 (基北北桃竹)</option>
-          <option value="central">中部 (苗台中彰投)</option>
-          <option value="south">南部 (雲嘉南高屏)</option>
-          <option value="east">東部 (宜花東)</option>
-        </select>
-      </div>
-
-      <div style="margin-left: auto; display: flex; align-items: flex-end;">
-        <button id="btn-reset-filters" class="btn btn-secondary btn-sm">重設篩選條件</button>
+          <!-- Category Gantt Rows Container -->
+          <div id="gantt-body-container">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Main Content Layout: Grid -->
-    <div class="grid-3" style="grid-template-columns: 2fr 1fr; gap: 2rem;">
-      
-      <!-- Left Column: Varieties & Spots List -->
-      <div>
+    <!-- Section 2: Current Month Focus & Spot Library -->
+    <section>
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+          <label class="form-label" style="margin-bottom: 0;">[ 觀賞 / 出遊月份 ]</label>
+          <select id="filter-month" class="form-select" style="min-width: 150px;">
+            <option value="all">全年 12 個月</option>
+            <option value="1">1 月 (寒梅/山櫻花)</option>
+            <option value="2">2 月 (八重櫻/富士櫻)</option>
+            <option value="3">3 月 (吉野櫻極盛)</option>
+            <option value="4">4 月 (吉野櫻/油桐花)</option>
+            <option value="5">5 月 (油桐花/繡球花)</option>
+            <option value="6">6 月 (繡球花極盛)</option>
+            <option value="7">7 月 (高山景觀花卉)</option>
+            <option value="8">8 月 (金針花季)</option>
+            <option value="9">9 月 (金針花極盛)</option>
+            <option value="10">10 月 (秋季景觀)</option>
+            <option value="11">11 月 (楓葉/銀杏專區)</option>
+            <option value="12">12 月 (角板山白梅)</option>
+          </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+          <label class="form-label" style="margin-bottom: 0;">[ 花種大分類 ]</label>
+          <select id="filter-category" class="form-select" style="min-width: 150px;">
+            <option value="all">全部分類</option>
+            <option value="cherry_blossom">櫻花 (細分山櫻/吉野櫻...)</option>
+            <option value="plum_blossom">梅花 (細分白梅/綠萼梅)</option>
+            <option value="tung_flower">油桐花</option>
+            <option value="hydrangea">繡球花</option>
+            <option value="daylily">金針花</option>
+          </select>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+          <label class="form-label" style="margin-bottom: 0;">[ 全台地區 ]</label>
+          <select id="filter-region" class="form-select" style="min-width: 140px;">
+            <option value="all">全台灣地區</option>
+            <option value="north">北部 (基北北桃竹)</option>
+            <option value="central">中部 (苗台中彰投)</option>
+            <option value="south">南部 (雲嘉南高屏)</option>
+            <option value="east">東部 (宜花東)</option>
+          </select>
+        </div>
+
+        <div style="margin-left: auto; display: flex; align-items: flex-end;">
+          <button id="btn-reset-filters" class="btn btn-secondary btn-sm">重設篩選條件</button>
+        </div>
+      </div>
+
+      <!-- Content Area Grid -->
+      <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
         
-        <!-- Section 1: Varieties Breakdown -->
-        <div style="margin-bottom: 2.5rem;">
+        <!-- Left Column: Active Varieties Cards -->
+        <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
-              [ 花種品種與花期細分 ]
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+              [ 正值花期品種清單 ]
             </h2>
             <span id="varieties-count" class="badge badge-blue">0 個品種</span>
           </div>
 
-          <div id="varieties-container" class="grid-2">
+          <div id="varieties-container" style="display: flex; flex-direction: column; gap: 1rem;">
             <!-- Rendered by JS -->
           </div>
         </div>
 
-        <!-- Section 2: Famous Spots Library -->
+        <!-- Right Column: Famous Spots Library -->
         <div>
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2 style="font-size: 1.3rem; font-weight: 700; color: var(--text-primary);">
-              [ 台灣賞花名勝景點庫 ]
+            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">
+              [ 全台推薦賞花景點 ]
             </h2>
             <span id="spots-count" class="badge badge-green">0 個景點</span>
           </div>
@@ -119,40 +156,7 @@
         </div>
 
       </div>
-
-      <!-- Right Column: Out-of-town Trip Itinerary Planner -->
-      <aside>
-        <div class="card" style="position: sticky; top: 90px; background-color: var(--bg-surface);">
-          <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 0.5rem;">
-            <span class="badge badge-pink">[ 出遊規劃器 ]</span>
-            <h2 class="card-title">賞花假期行程表</h2>
-            <p class="card-subtitle">從左側景點點擊「加入行程」，排定休假賞花路線。</p>
-          </div>
-
-          <div class="card-body">
-            <div class="form-group">
-              <label class="form-label">[ 預計出遊日期 ]</label>
-              <input type="date" id="trip-date-input" class="form-control">
-            </div>
-
-            <div style="margin-top: 1.25rem;">
-              <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.75rem;">
-                已排定景點與順序：
-              </div>
-              <div id="itinerary-list" class="timeline">
-                <!-- Rendered dynamically -->
-              </div>
-            </div>
-
-            <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem;">
-              <button id="btn-print-itinerary" class="btn btn-secondary btn-sm" style="flex: 1;">列印 / 匯出行程</button>
-              <button id="btn-clear-itinerary" class="btn btn-danger btn-sm">清空</button>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-    </div>
+    </section>
 
   </main>
 
@@ -175,6 +179,7 @@
   <script src="js/supabase-config.js"></script>
 
   <!-- Application Scripts -->
+  <script src="js/ics-exporter.js"></script>
   <script src="js/flower-data.js"></script>
   <script src="js/flower-planner.js"></script>
   <script src="js/garden-manager.js"></script>
@@ -184,60 +189,186 @@
   <script src="js/watering-tracker.js"></script>
   <script src="js/app.js"></script>
 
-  <!-- Page Specific Script -->
+  <!-- Page Logic Script -->
   <script>
+    const expandedCategories = new Set();
+
     document.addEventListener("DOMContentLoaded", async () => {
-      const elCategory = document.getElementById("filter-category");
+      const currentMonth = new Date().getMonth() + 1;
       const elMonth = document.getElementById("filter-month");
+      const elCategory = document.getElementById("filter-category");
       const elRegion = document.getElementById("filter-region");
       const elBtnReset = document.getElementById("btn-reset-filters");
 
-      const elTripDate = document.getElementById("trip-date-input");
-      if (elTripDate) {
-        elTripDate.value = new Date().toISOString().split('T')[0];
+      // Default filter month to current real month (e.g. August)
+      if (elMonth) {
+        elMonth.value = currentMonth.toString();
       }
 
-      function updateUI() {
+      function updatePageUI() {
         const cat = elCategory.value;
         const month = elMonth.value;
         const region = elRegion.value;
 
+        // 1. Render 12-Month Gantt Timeline
+        renderGanttTimeline(currentMonth);
+
+        // 2. Render Varieties & Spots list for filtered month/category
         const varieties = window.FlowerPlanner.filterVarieties(cat, month);
         renderVarietiesList(varieties);
 
         const spots = window.FlowerPlanner.filterSpots(region, cat);
         renderSpotsList(spots);
-
-        renderItineraryList();
       }
 
-      elCategory.addEventListener("change", updateUI);
-      elMonth.addEventListener("change", updateUI);
-      elRegion.addEventListener("change", updateUI);
+      elCategory.addEventListener("change", updatePageUI);
+      elMonth.addEventListener("change", updatePageUI);
+      elRegion.addEventListener("change", updatePageUI);
 
       elBtnReset.addEventListener("click", () => {
         elCategory.value = "all";
-        elMonth.value = "all";
+        elMonth.value = currentMonth.toString();
         elRegion.value = "all";
-        updateUI();
+        updatePageUI();
       });
 
-      document.getElementById("btn-clear-itinerary").addEventListener("click", () => {
-        window.FlowerPlanner.saveItinerary([]);
-        renderItineraryList();
-      });
-
-      document.getElementById("btn-print-itinerary").addEventListener("click", () => {
-        window.print();
-      });
-
-      updateUI();
+      updatePageUI();
 
       if (window.supabaseClient) {
         await window.FlowerPlanner.fetchFlowerDataAsync();
-        updateUI();
+        updatePageUI();
       }
     });
+
+    /**
+     * Renders the 12-Month Annual Gantt Blooming Timeline Table
+     */
+    function renderGanttTimeline(currentMonthNum) {
+      const headerContainer = document.getElementById("gantt-header-row");
+      const bodyContainer = document.getElementById("gantt-body-container");
+
+      // Render Header
+      let headerHTML = `<div class="gantt-header-col" style="text-align: left; padding-left: 0.5rem;">花種大類別 (點擊展開品種)</div>`;
+      for (let m = 1; m <= 12; m++) {
+        const isCurrent = m === currentMonthNum;
+        headerHTML += `
+          <div class="gantt-header-col ${isCurrent ? 'current-month' : ''}">
+            ${m}月 ${isCurrent ? '(當前)' : ''}
+          </div>
+        `;
+      }
+      headerContainer.innerHTML = headerHTML;
+
+      // Render Body Category Rows
+      const timelineData = window.FlowerPlanner.getCategoryTimelineData();
+
+      if (timelineData.length === 0) {
+        bodyContainer.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-muted);">尚無花卉類別與花期資料</div>`;
+        return;
+      }
+
+      bodyContainer.innerHTML = timelineData.map(cat => {
+        const isExpanded = expandedCategories.has(cat.id);
+        const toggleIconText = isExpanded ? "[收合 -]" : "[展開 +]";
+
+        // Build 12 month cells for category
+        let cellsHTML = "";
+        for (let m = 1; m <= 12; m++) {
+          const inSeason = cat.bloomingMonths.includes(m);
+          const isPeak = cat.peakMonths.includes(m);
+          const isCurrent = m === currentMonthNum;
+
+          let cellClass = "gantt-cell";
+          let labelText = "";
+
+          if (isPeak) {
+            cellClass += " active-peak";
+            labelText = "盛開";
+          } else if (inSeason) {
+            cellClass += " active-season";
+            labelText = "花期";
+          }
+
+          if (isCurrent) {
+            cellClass += " current-month-highlight";
+          }
+
+          cellsHTML += `<div class="${cellClass}">${labelText}</div>`;
+        }
+
+        // Build sub-rows HTML if expanded
+        let subRowsHTML = "";
+        if (isExpanded && cat.varieties && cat.varieties.length > 0) {
+          const varRows = cat.varieties.map(v => {
+            let vCellsHTML = "";
+            for (let m = 1; m <= 12; m++) {
+              const inVSeason = v.bloomingMonths.includes(m);
+              const isVPeak = v.peakMonth === m;
+              const isCurrent = m === currentMonthNum;
+
+              let vCellClass = "gantt-cell";
+              let vLabelText = "";
+
+              if (isVPeak) {
+                vCellClass += " active-peak";
+                vLabelText = "極盛";
+              } else if (inVSeason) {
+                vCellClass += " active-season";
+                vLabelText = "開花";
+              }
+
+              if (isCurrent) {
+                vCellClass += " current-month-highlight";
+              }
+
+              vCellsHTML += `<div class="${vCellClass}">${vLabelText}</div>`;
+            }
+
+            return `
+              <div class="gantt-row-variety">
+                <div class="gantt-variety-label">
+                  • ${v.name}
+                  ${v.colorTag ? `<div style="font-size: 0.7rem; color: var(--text-muted);">${v.colorTag}</div>` : ''}
+                </div>
+                ${vCellsHTML}
+              </div>
+            `;
+          }).join("");
+
+          subRowsHTML = `
+            <div class="gantt-subrows-container">
+              <div style="font-size: 0.75rem; color: var(--accent-teal); font-weight: 600; padding: 0.2rem 0;">
+                [ ${cat.name} 旗下細分品種花期分佈 ]
+              </div>
+              ${varRows}
+            </div>
+          `;
+        }
+
+        return `
+          <div style="margin-bottom: 0.4rem;">
+            <div class="gantt-row-category" onclick="toggleCategoryExpand('${cat.id}')">
+              <div class="gantt-category-label">
+                <span>[${cat.name}]</span>
+                <span class="gantt-toggle-indicator">${toggleIconText}</span>
+              </div>
+              ${cellsHTML}
+            </div>
+            ${subRowsHTML}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleCategoryExpand(catId) {
+      if (expandedCategories.has(catId)) {
+        expandedCategories.delete(catId);
+      } else {
+        expandedCategories.add(catId);
+      }
+      const currentMonth = new Date().getMonth() + 1;
+      renderGanttTimeline(currentMonth);
+    }
 
     function renderVarietiesList(varieties) {
       const container = document.getElementById("varieties-container");
@@ -246,13 +377,13 @@
       countBadge.textContent = `${varieties.length} 個品種`;
 
       if (varieties.length === 0) {
-        container.innerHTML = `<div style="grid-column: span 2; padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">尚無花卉品種數據（可於 Supabase 隨時新增）</div>`;
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">所選條件下暫無盛開花種數據</div>`;
         return;
       }
 
       container.innerHTML = varieties.map(v => `
         <div class="card" style="padding: 1.25rem;">
-          <div class="card-header" style="margin-bottom: 0.5rem;">
+          <div class="card-header" style="margin-bottom: 0.4rem;">
             <div>
               <span class="badge ${v.badgeClass}" style="margin-bottom: 0.3rem;">${v.statusText}</span>
               <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">${v.varietyName}</h3>
@@ -260,14 +391,11 @@
             <span class="badge badge-gray">${v.categoryName}</span>
           </div>
           <div style="font-size: 0.8rem; color: var(--accent-teal); font-weight: 600; margin-bottom: 0.4rem;">
-            花期：${v.mainSeason} (極盛：${v.peakMonth}月) | 花色：${v.colorTag}
+            花期時段：${v.mainSeason} (極盛：${v.peakMonth}月) | 花色：${v.colorTag}
           </div>
-          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
             ${v.features}
           </p>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">
-            代表景點：${v.spots.join("、") || "尚無連結景點"}
-          </div>
         </div>
       `).join("");
     }
@@ -279,18 +407,20 @@
       countBadge.textContent = `${spots.length} 個景點`;
 
       if (spots.length === 0) {
-        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">尚無賞花景點數據（可於 Supabase 隨時新增）</div>`;
+        container.innerHTML = `<div style="padding: 2rem; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: var(--radius-md);">所選條件下暫無賞花景點數據</div>`;
         return;
       }
 
       container.innerHTML = spots.map(s => `
         <div class="card" style="padding: 1.25rem; background-color: var(--bg-surface);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.5rem;">
             <div>
               <span class="badge badge-blue" style="margin-bottom: 0.3rem;">${s.regionName}</span>
               <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary);">${s.name}</h3>
             </div>
-            <button class="btn btn-primary btn-sm" onclick="handleAddToItinerary('${s.id}')">+ 加入假期行程</button>
+            <button class="btn btn-secondary btn-sm" onclick="window.ICSExporter.openGoogleMaps('${s.location || s.name}')">
+              [開啟地圖導航]
+            </button>
           </div>
           <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
             位置：${s.location} | 建議停留：${s.suggestedDuration} | 最佳月份：${s.bestMonths.join("月、")}月
@@ -299,48 +429,10 @@
             ${s.description}
           </p>
           <div style="font-size: 0.8rem; color: var(--accent-amber); background: rgba(245,158,11,0.1); padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.2);">
-            出遊建議：${s.tips}
+            賞花建議：${s.tips}
           </div>
         </div>
       `).join("");
-    }
-
-    function handleAddToItinerary(spotId) {
-      const tripDate = document.getElementById("trip-date-input").value;
-      const res = window.FlowerPlanner.addSpotToItinerary(spotId, tripDate);
-      if (res) {
-        renderItineraryList();
-      } else {
-        alert("此景點已在您的行程清單中！");
-      }
-    }
-
-    function renderItineraryList() {
-      const container = document.getElementById("itinerary-list");
-      const items = window.FlowerPlanner.getSavedItinerary();
-
-      if (items.length === 0) {
-        container.innerHTML = `
-          <div style="padding: 1rem 0; color: var(--text-muted); font-size: 0.85rem; text-align: center;">
-            尚未加入任何景點。<br>點擊景點卡片「+ 加入假期行程」即可排定！
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = items.map((item, idx) => `
-        <div class="timeline-item">
-          <div class="timeline-time">第 ${idx + 1} 站 | ${item.regionName}</div>
-          <div class="timeline-title">${item.spotName}</div>
-          <div class="timeline-desc">建議停留 ${item.suggestedDuration}</div>
-          <button class="btn btn-danger btn-sm" onclick="handleRemoveItinerary('${item.id}')" style="margin-top: 0.4rem; padding: 0.15rem 0.4rem; font-size: 0.75rem;">移除</button>
-        </div>
-      `).join("");
-    }
-
-    function handleRemoveItinerary(itinId) {
-      window.FlowerPlanner.removeSpotFromItinerary(itinId);
-      renderItineraryList();
     }
   </script>
 

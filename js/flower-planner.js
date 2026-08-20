@@ -9,13 +9,13 @@ window.FlowerPlanner = (function() {
   let cloudSpots = null;
 
   function getCategories() {
-    if (cloudCategories) return cloudCategories;
-    return window.PlantHubData ? window.PlantHubData.flowerCategories : [];
+    if (cloudCategories && cloudCategories.length > 0) return cloudCategories;
+    return (window.PlantHubData && window.PlantHubData.flowerCategories) ? window.PlantHubData.flowerCategories : [];
   }
 
   function getSpots() {
-    if (cloudSpots) return cloudSpots;
-    return window.PlantHubData ? window.PlantHubData.flowerSpots : [];
+    if (cloudSpots && cloudSpots.length > 0) return cloudSpots;
+    return (window.PlantHubData && window.PlantHubData.flowerSpots) ? window.PlantHubData.flowerSpots : [];
   }
 
   async function fetchFlowerDataAsync() {
@@ -111,47 +111,42 @@ window.FlowerPlanner = (function() {
     });
   }
 
-  const STORAGE_KEY_ITINERARY = "planthub_my_itinerary";
+  function getCategoryTimelineData() {
+    const categories = getCategories();
+    return categories.map(cat => {
+      const allMonthsSet = new Set();
+      const peakMonthsSet = new Set();
 
-  function getSavedItinerary() {
-    const data = localStorage.getItem(STORAGE_KEY_ITINERARY);
-    if (!data) return [];
-    try { return JSON.parse(data); } catch (e) { return []; }
-  }
+      (cat.varieties || []).forEach(v => {
+        (v.bloomingMonths || []).forEach(m => allMonthsSet.add(m));
+        if (v.peakMonth) peakMonthsSet.add(v.peakMonth);
+      });
 
-  function saveItinerary(items) {
-    localStorage.setItem(STORAGE_KEY_ITINERARY, JSON.stringify(items));
-  }
+      const sortedMonths = Array.from(allMonthsSet).sort((a, b) => a - b);
+      const sortedPeaks = Array.from(peakMonthsSet).sort((a, b) => a - b);
 
-  function addSpotToItinerary(spotId, tripDate = null) {
-    const spots = getSpots();
-    const spot = spots.find(s => s.id === spotId);
-    if (!spot) return null;
+      let seasonRangeText = "無資料";
+      if (sortedMonths.length > 0) {
+        seasonRangeText = `${sortedMonths[0]}月 - ${sortedMonths[sortedMonths.length - 1]}月`;
+      }
 
-    const itinerary = getSavedItinerary();
-    if (!itinerary.some(item => item.spotId === spotId)) {
-      const newItem = {
-        id: "itin_" + Date.now(),
-        spotId: spot.id,
-        spotName: spot.name,
-        regionName: spot.regionName,
-        location: spot.location,
-        targetCategory: spot.targetCategory,
-        suggestedDuration: spot.suggestedDuration,
-        tripDate: tripDate || new Date().toISOString().split('T')[0],
-        order: itinerary.length + 1
+      return {
+        id: cat.id,
+        name: cat.name,
+        description: cat.description,
+        mainSeason: cat.mainSeason || seasonRangeText,
+        bloomingMonths: sortedMonths,
+        peakMonths: sortedPeaks,
+        varieties: (cat.varieties || []).map(v => ({
+          id: v.id,
+          name: v.name,
+          bloomingMonths: v.bloomingMonths || [],
+          peakMonth: v.peakMonth,
+          colorTag: v.colorTag || "",
+          features: v.features || ""
+        }))
       };
-      itinerary.push(newItem);
-      saveItinerary(itinerary);
-      return newItem;
-    }
-    return null;
-  }
-
-  function removeSpotFromItinerary(itinId) {
-    let itinerary = getSavedItinerary();
-    itinerary = itinerary.filter(item => item.id !== itinId);
-    saveItinerary(itinerary);
+    });
   }
 
   return {
@@ -160,8 +155,7 @@ window.FlowerPlanner = (function() {
     fetchFlowerDataAsync,
     filterVarieties,
     filterSpots,
-    getSavedItinerary,
-    addSpotToItinerary,
-    removeSpotFromItinerary
+    getCategoryTimelineData
   };
 })();
+
